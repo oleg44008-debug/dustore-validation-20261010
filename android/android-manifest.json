@@ -1,0 +1,519 @@
+{
+ "files": [
+  {
+   "path": "AndroidManifest.xml",
+   "bytes": 8695,
+   "sha256": "55e59af0578e656c3da4de7924ab1383603e690300d283842bf770b590943bf4"
+  },
+  {
+   "path": "README.md",
+   "bytes": 11499,
+   "sha256": "813d877edc04eb24e6bdf35ff3a0c9ee18c1f77252fe83e45b06d6c695a7ee8d"
+  },
+  {
+   "path": "build.ps1",
+   "bytes": 9001,
+   "sha256": "dc16d0d5bd96007b926cc307144088518ea7f7b4feae8d9a894a5934e05f9b63"
+  },
+  {
+   "path": "make-stub-key.ps1",
+   "bytes": 1700,
+   "sha256": "d340a60b0d5b48d146337c1855fd481e58ee8fc5f091aa11d263d95f7cc4857d"
+  },
+  {
+   "path": "exstub/AndroidManifest.xml",
+   "bytes": 1858,
+   "sha256": "42e7a293fdb7f3f16e1c3bcbe6ffea72228a4330017491560fa133c87ad08483"
+  },
+  {
+   "path": "exstub/res/mipmap-xxhdpi/icon.png",
+   "bytes": 13996,
+   "sha256": "f4fb2ff07acc1ac49e642511b6b6987e67b407699f50ce5a26ef6068b5250ed5"
+  },
+  {
+   "path": "exstub/src/ru/exepc/exstub/Main.java",
+   "bytes": 1726,
+   "sha256": "72417824989c876a0a56b752311133a8d14ad0faf470d767ee9adda40bb5a190"
+  },
+  {
+   "path": "jniLibs/arm64-v8a/libandroid-shmem.so",
+   "bytes": 14432,
+   "sha256": "84475798e07c8174dbbfaec70a827fdb02f19ffa69a589380c13e7507fd0e731"
+  },
+  {
+   "path": "jniLibs/arm64-v8a/libbox64.so",
+   "bytes": 28054760,
+   "sha256": "3af1278b4bfe9c02404758c2ebdb3bebb98807769025c85d383ad8c403f228b3"
+  },
+  {
+   "path": "jniLibs/arm64-v8a/libproot.so",
+   "bytes": 241240,
+   "sha256": "cafe2f3957f0c5c92c2f0f545e259e09d1b580d2ea1264acdbb96e88223e19fd"
+  },
+  {
+   "path": "jniLibs/arm64-v8a/libprootloader.so",
+   "bytes": 18136,
+   "sha256": "44ef39c1e1a18c09f6e4c4b5d6f8bba82d30596598bd155ec162d05c5122ff04"
+  },
+  {
+   "path": "jniLibs/arm64-v8a/libtalloc.so.2",
+   "bytes": 31440,
+   "sha256": "3c9b207c0a6ea2896b7523e03f55d9ab0d9e88baa115d4c32b84058ff4246fbb"
+  },
+  {
+   "path": "res/drawable/dialog_back.xml",
+   "bytes": 334,
+   "sha256": "c02bb93c4c740df5fc3aaa8437f5d4a313a2b52e5df0c1f8647fc8f1ed09da1a"
+  },
+  {
+   "path": "res/drawable-nodpi/brand_bridge.png",
+   "bytes": 536125,
+   "sha256": "ac44f8e36122b8a7201bbddbb391d0816274d114bde4ed58ab45c4e438fbf44e"
+  },
+  {
+   "path": "res/drawable-nodpi/brand_empty.png",
+   "bytes": 383662,
+   "sha256": "b52fa7ec7bb0f56fdbad401d0a1ad01883342d5e69f2dd1b91ca658043108c90"
+  },
+  {
+   "path": "res/drawable-nodpi/brand_exen.png",
+   "bytes": 620465,
+   "sha256": "0f4036a819c5fcc679078702564b9878ca2f5f39f5e3eb1dcb8b5a74eeb48587"
+  },
+  {
+   "path": "res/mipmap-hdpi/ic_launcher.png",
+   "bytes": 5247,
+   "sha256": "992cbc570309468f4559504c182e81c16281931f5b18e16a6e91c31dfb5424de"
+  },
+  {
+   "path": "res/mipmap-mdpi/ic_launcher.png",
+   "bytes": 3093,
+   "sha256": "ab046b80de51e00578e6b5fa2f8f97ecaa63747b398c4974efcf9ecda0a2b659"
+  },
+  {
+   "path": "res/mipmap-xhdpi/ic_launcher.png",
+   "bytes": 7363,
+   "sha256": "0ca40d54dba45e67450ef6bccd441683ca658834a257707660fa67ff62921391"
+  },
+  {
+   "path": "res/mipmap-xxhdpi/ic_launcher.png",
+   "bytes": 13996,
+   "sha256": "f4fb2ff07acc1ac49e642511b6b6987e67b407699f50ce5a26ef6068b5250ed5"
+  },
+  {
+   "path": "res/mipmap-xxxhdpi/ic_launcher.png",
+   "bytes": 23311,
+   "sha256": "21a97a27488a911dc91039a1951e4b3f168238f5aaebb4cba2275bc6fa4b51f1"
+  },
+  {
+   "path": "res/raw/publisher.txt",
+   "bytes": 222,
+   "sha256": "78fd5212370169517e0df68dfc285f2f3c84317273f8b99a13ad9e62a7341b8b"
+  },
+  {
+   "path": "res/values/strings.xml",
+   "bytes": 110,
+   "sha256": "41963bb4f67be7ac8fbd960fd1610383098a0806fd0ca15c4fb18c6a0770b967"
+  },
+  {
+   "path": "res/values/styles.xml",
+   "bytes": 2039,
+   "sha256": "ad8a1b5767a8d900cf2ee45bcf20fb05b98c9482ce83ebb804d9f934fbbaf3aa"
+  },
+  {
+   "path": "res/xml/game_mode_config.xml",
+   "bytes": 339,
+   "sha256": "6193eb647a38e0f3ef9b4b6620a0a3db24e4c2f139de2dec809a178a007601c5"
+  },
+  {
+   "path": "res/xml/network_security_config.xml",
+   "bytes": 1017,
+   "sha256": "1aa1fc78a4180fe5b4e5d36aea59e8ed11f9036f6e1fbf90f751ddc9ed0f7f16"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Account.java",
+   "bytes": 7710,
+   "sha256": "b90e126b9183e21317a8cb90074093a6b1960f25f4d8fb1455e9ce98e9e00bdf"
+  },
+  {
+   "path": "src/ru/dustore/launcher/AccountSheet.java",
+   "bytes": 10643,
+   "sha256": "472668beb1132abd87f50f65ec6031a1c65c6d2e6c2a90aa34ab6cd8f5e09446"
+  },
+  {
+   "path": "src/ru/dustore/launcher/AndroidUltra.java",
+   "bytes": 19219,
+   "sha256": "2995b3af5c0098a7ce2ee91a7894bd65eaf97814c4376def543ffd1521aad922"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Api.java",
+   "bytes": 8156,
+   "sha256": "6744901e1027a09ce68564a46563078b29ae1c0faa1f74fb7650d5fb590b5e30"
+  },
+  {
+   "path": "src/ru/dustore/launcher/DustoreApp.java",
+   "bytes": 412,
+   "sha256": "c5596e63a312b2918219e3ec36ba053869932c4bf58f1f97159baf0f3811676b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Ex.java",
+   "bytes": 32293,
+   "sha256": "2c78e8c2c339b6d517d57d28c9a4a3f4aeaf7b872206fe131a1d247bb3df00e9"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExActivity.java",
+   "bytes": 54755,
+   "sha256": "93a83b5398e8757a724aba981633eed5ce27f06897e13372f7fa0b96cbed9370"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExApk.java",
+   "bytes": 16957,
+   "sha256": "eac5440edc55dea625041b974e9cb605eb7e769327cceb5d9c3acb8353353a99"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExAudio.java",
+   "bytes": 4826,
+   "sha256": "b07006ebb75886b9e921628d39c7676a7ad162854243e10e4e0be88862ef69bb"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExAxml.java",
+   "bytes": 8645,
+   "sha256": "b8202f6e6d1c68968685fd3b179b72380961d66e4f722b66ff8b5d9edb48c574"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExBuild.java",
+   "bytes": 30022,
+   "sha256": "3f47ad36c680a1b20cff9f8a1136bbb803cf2b81bab2c39b70d0441d19c7a723"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExConvert.java",
+   "bytes": 17869,
+   "sha256": "4e89c82af561704db032659034cf66b21d780f5252a5c3a3a4c73b9d628d6569"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExDisplay.java",
+   "bytes": 76773,
+   "sha256": "07dc3dd8cc78a68349cc198c281344d4befebe36754ade45cfa9aceae93b3728"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExFileRead.java",
+   "bytes": 1246,
+   "sha256": "099e857f372401f0340e76bffc5438acb51b08744ef9ab206f318de9d6cd5a57"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExGame.java",
+   "bytes": 7217,
+   "sha256": "a2ef3a5f27317d45d1885bc67a802a8320bebaf20af75abf101245b81d068225"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExIcon.java",
+   "bytes": 13690,
+   "sha256": "9ac6b11b60d741768ce6df7a4dd42323cd350a7045179ee60b978efb55ba6a28"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExKeymap.java",
+   "bytes": 11546,
+   "sha256": "ea5d5247fd3e632343e65d57f2bca43d86d6262638c70ba7a02438f89a99a601"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExMemory.java",
+   "bytes": 5816,
+   "sha256": "66e5533cf88279b53b2cd98d79fc4c3022c7ad3b56e8cf19e41fc51a92e92c87"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExNative.java",
+   "bytes": 9000,
+   "sha256": "df719f81d187d73883db055a28953df7411b7cf9a0da2c4c82cabfba15b1e78b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExPads.java",
+   "bytes": 15079,
+   "sha256": "b8d3b9b516e7680a5fbde3fff7db3523b33275dfb02c5c38e5d03a2057f9f7e2"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExParts.java",
+   "bytes": 16163,
+   "sha256": "5b136f9cd8adaff034558e509797d4d83bf963a7fba5fc3fd4cc0b0aa6f14b5b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExPe.java",
+   "bytes": 11211,
+   "sha256": "d515a6de0b1691e482660abc158b66baf0b80171c9540e59b85ce1710809d426"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExProbe.java",
+   "bytes": 7328,
+   "sha256": "1ed1b640bfa872666ba1057e262167ce07d84273a158a3cc303aca4efe6f4c28"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExProcess.java",
+   "bytes": 1057,
+   "sha256": "b8fdf5df95d3822a281f4fd0e2d6079bbd8370d7df175c32b3a754354aaad928"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExQuota.java",
+   "bytes": 10124,
+   "sha256": "1a9cbf08752fda4d7ed8ab3a1fb4eef8e40b3368ec2a8fbb4a4139e4f21a14ad"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExRecipe.java",
+   "bytes": 29639,
+   "sha256": "ad04cbd21ad67be9bbf55adc07a7ac6042703d3bedf777c1d652d467a7b86fdd"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExScreen.java",
+   "bytes": 9661,
+   "sha256": "77ebffcc87ad68410a14c44565a660d38dfac6c1d930a0e6664669df6eabfdfc"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExService.java",
+   "bytes": 4085,
+   "sha256": "ab39993f8934e68245e603e71baa8199b5407914950367c3b619f079aa27daa0"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExSession.java",
+   "bytes": 513,
+   "sha256": "2d85bcd50fc08ace21a5e897c3a29074ef6cdb474173ef5d34eb69d04ce42f47"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExTask.java",
+   "bytes": 16336,
+   "sha256": "fc5cacdad72e6cbb24d3f851362db7ac756a7b14aece04ea7eb2e6270402c8e1"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExTaskBinding.java",
+   "bytes": 13009,
+   "sha256": "75ca3b8bc60d3a16ae09bcbdb53f862a995eebfd6e5867897370686660cf88d8"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExTaskSheet.java",
+   "bytes": 19410,
+   "sha256": "3cfd874670806b3f9bd77acc0ba40a9cab29289dd0e53f6ddcf08b3f2ebb69d4"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExTaskVisual.java",
+   "bytes": 14869,
+   "sha256": "3e3cfcf91322da1d9de82b43fd7c8bc0776b9f494631fa9d332a1e0d8eee7e23"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ExWork.java",
+   "bytes": 4224,
+   "sha256": "623aa0c4d64db7b8ec4a4b5d692ebf2cf4f779165ef6cc6174cc62397e1a8ede"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Files.java",
+   "bytes": 6414,
+   "sha256": "4f405be689bd44213b0ef4b4e2a04d744d6a6876a39b4941c099d0d67ec25bb2"
+  },
+  {
+   "path": "src/ru/dustore/launcher/FrameCopyBounds.java",
+   "bytes": 568,
+   "sha256": "6a400b2a8e6cdd1ec295a0d174352d6116618d9d508dee41e3c83d659938d57b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/GameActivity.java",
+   "bytes": 9472,
+   "sha256": "c4e8168b80b71d3befdb42ca5df49d80a48a74c5dcaeb17c4b77866407fe5aab"
+  },
+  {
+   "path": "src/ru/dustore/launcher/GameFolders.java",
+   "bytes": 507,
+   "sha256": "a7fef428569909b06253865824dc5f02ec672b3bd8a6ec991547ad65f0acbce0"
+  },
+  {
+   "path": "src/ru/dustore/launcher/GameKey.java",
+   "bytes": 3358,
+   "sha256": "21d081c4d1b059a561319ae931ebd1dc91e2698810067bf81b896c3211cc7a11"
+  },
+  {
+   "path": "src/ru/dustore/launcher/GameRefreshRate.java",
+   "bytes": 4949,
+   "sha256": "b147b7e1a90e1a3dfc14f0aeae0d8a3e02d442d11b11788484795afe598dd913"
+  },
+  {
+   "path": "src/ru/dustore/launcher/InputLedger.java",
+   "bytes": 1501,
+   "sha256": "d33b4c49939881010e5b0a751b7cd1e80c4b0559fcaf467a5adab842c3dbc370"
+  },
+  {
+   "path": "src/ru/dustore/launcher/JoypadActivity.java",
+   "bytes": 51908,
+   "sha256": "32814adbb34316ba0c516882771723e8c432989424b3f65da53ac48b0e69e7b4"
+  },
+  {
+   "path": "src/ru/dustore/launcher/KeyPad.java",
+   "bytes": 26248,
+   "sha256": "99a38153b8fb4ee9b5f1e148abe07f1e7245c38e8f9c7997e64333aeb558c17b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Library.java",
+   "bytes": 19357,
+   "sha256": "838df4596de93e46c704243cd76643fd093da330d2a9fcfdf94719e65dd5b2b7"
+  },
+  {
+   "path": "src/ru/dustore/launcher/LibraryCloud.java",
+   "bytes": 9314,
+   "sha256": "515c300fac4620067ff91492a9293b7ea662b77d5234917462ac44a6152a42b0"
+  },
+  {
+   "path": "src/ru/dustore/launcher/LibraryScreen.java",
+   "bytes": 33737,
+   "sha256": "b396294bd9ef7f2253455a8a42648e3dd55501f9af512687c5ec0b61a15fc311"
+  },
+  {
+   "path": "src/ru/dustore/launcher/LibraryState.java",
+   "bytes": 8796,
+   "sha256": "f59bd8583b74bb67caf370dedbdf3784125f8650daaf3fd9c83cf8a9413e6e5a"
+  },
+  {
+   "path": "src/ru/dustore/launcher/MainActivity.java",
+   "bytes": 98333,
+   "sha256": "b4a3feeb732296b47d715291ed15e99bf5ecc8e620ded2743909e63fd53fd8a2"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Motion.java",
+   "bytes": 5132,
+   "sha256": "4eb64b30a28ed42042ba2841073e8b9ddd59987dda4e1bd6848ec70024cae194"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PadAccessibility.java",
+   "bytes": 15463,
+   "sha256": "e41fd3a3d29407e311ce5d60115a1885af916dc6ed22aed41ebc4de4a83156bd"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PadChrome.java",
+   "bytes": 18241,
+   "sha256": "f212a150876c0862ec8bf92287985966117d59e650a1c74c411e51c7f68f0ca7"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PadIcons.java",
+   "bytes": 26741,
+   "sha256": "376618cbef171a5288fdc56bcaf5bacdd470e404701aeb7fc96823654bfc9194"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PadPanel.java",
+   "bytes": 20161,
+   "sha256": "d57a6160f07ea45ab5ddd872db6133dc121f8a7338b2f668daa06df5f1ef21ad"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PadView.java",
+   "bytes": 33346,
+   "sha256": "f0b8acb9eb190cbbe408c698e21795bafa4f5b09752dd0ac018b3dbe50503c01"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PcScreen.java",
+   "bytes": 43546,
+   "sha256": "eae4839d7bddfab501314736052046d94b25d94e08c47b0008a40e665812b3a8"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PremiumNav.java",
+   "bytes": 3633,
+   "sha256": "1428089da25d198445eaab586fe5e439028b6b9c3a2fcadfcc61b140cd6726c6"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Prime.java",
+   "bytes": 13816,
+   "sha256": "fabf14e2ab59b49bcc976566c0766024eb7fab4e37495b2194a6aca5ebcc70f9"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PrimeAppearance.java",
+   "bytes": 13468,
+   "sha256": "779310effc41503b3d380aae21b9fed5e8a170d452b8ec8bd6e4ab229367e961"
+  },
+  {
+   "path": "src/ru/dustore/launcher/PrimeIntro.java",
+   "bytes": 2618,
+   "sha256": "dbed6cb38bff809531150db00cc4092256f52d5ab6db784759c1d06a02953cf9"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Speaker.java",
+   "bytes": 4459,
+   "sha256": "99d08346f82b1056495379dc3c8e77edea278867365f76625f05643a0ce09000"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Tar.java",
+   "bytes": 10443,
+   "sha256": "9d2bf2dc444d230ab9cc19ade067534ada32500f5b2343ab8801ea72c788fe15"
+  },
+  {
+   "path": "src/ru/dustore/launcher/ThermalSample.java",
+   "bytes": 1476,
+   "sha256": "3bc2c5ef54de71f5a06d715217814cafe27364e95b8cb85c82655d4ea4fb80f1"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Tilt.java",
+   "bytes": 6090,
+   "sha256": "25f269298e61b349e8f73bb185d8a72cae6c276481963d418d11da359de0cef3"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Ui.java",
+   "bytes": 47438,
+   "sha256": "7d5932b41873b560130ee24c98cadd393fe9cd04718c9e98508735be9e229983"
+  },
+  {
+   "path": "src/ru/dustore/launcher/UiWork.java",
+   "bytes": 766,
+   "sha256": "a53821f13736d3f0afce6b58bb9f5107c2e0c8ed53b77f5c7775d7d97b144131"
+  },
+  {
+   "path": "src/ru/dustore/launcher/UltraPolicy.java",
+   "bytes": 1323,
+   "sha256": "808b0fa0aab49dd61d1443a2b95718bc5c9fb94a9a25b57b6de170c0933442ce"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Unpack.java",
+   "bytes": 6739,
+   "sha256": "8d87d99e9750abae4e227885c7d3c935eab4a91223742135920e0f3557ca2d8b"
+  },
+  {
+   "path": "src/ru/dustore/launcher/WebEntry.java",
+   "bytes": 702,
+   "sha256": "db25fc45d1bfc67c84133b84e323743a41c123d3769cf188ec6c03b974b5d519"
+  },
+  {
+   "path": "src/ru/dustore/launcher/WebServer.java",
+   "bytes": 12170,
+   "sha256": "4273927b80432d7142e984faa13ca337b10833eeb99a32bad27a8e5a87414d1f"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Wire.java",
+   "bytes": 3773,
+   "sha256": "651fadd0e46ed482c0dfc8ede8bcde475da201f12ae538c0c86a5ae632eb97e1"
+  },
+  {
+   "path": "tests/BehaviorTests.java",
+   "bytes": 5594,
+   "sha256": "e347c3416321bdc7c9d68eb3a1926fe1e66bf3f3589ed6f1f9d284c610226f36"
+  },
+  {
+   "path": "tests/ExTests.java",
+   "bytes": 9022,
+   "sha256": "784a911f3e99779047f56fb0d88fe1a8585550de5152071e3e59493521afc292"
+  },
+  {
+   "path": "tests/PerformanceTests.java",
+   "bytes": 5057,
+   "sha256": "5d541209d9c569d1124f64965745fe01487e97bdfc26c61432ded5f90f2d01b6"
+  },
+  {
+   "path": "tests/UnpackTest.java",
+   "bytes": 3622,
+   "sha256": "686d312ed523bcc5777f9e051cc63366e9762350335b2eb95844d7d8bb3195cd"
+  },
+  {
+   "path": "tests/run-tests.ps1",
+   "bytes": 2620,
+   "sha256": "edf03edc763895fe84a6f723b777b1562cbc6bdc841870e8c089dc1041b23931"
+  },
+  {
+   "path": "tests/lib/json.jar",
+   "bytes": 78332,
+   "sha256": "3cf6cd6892e32e2b4c1c39e0f52f5248a2f5b37646fdfbb79a66b46b618414ed"
+  },
+  {
+   "path": "tools/ExportKey.java",
+   "bytes": 1317,
+   "sha256": "939151a756030aa355f0e671956c4af1db05adaa88e65ba7a12cff3c9f358c8e"
+  }
+ ]
+}

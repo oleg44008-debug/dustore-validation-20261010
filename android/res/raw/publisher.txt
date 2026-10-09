@@ -1,0 +1,4 @@
+DustoreX by eXepc
+Copyright (c) 2026 eXepc
+Official builds contain the eXepc mark in the artwork and launcher interface.
+Verify the published SHA-256 hashes and Android signing certificate to identify an official release.

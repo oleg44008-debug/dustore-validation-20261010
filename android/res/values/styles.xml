@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Match native surfaces while Android creates or recreates the window. -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#0B0D14</item>
+        <item name="android:statusBarColor">#0B0D14</item>
+        <item name="android:navigationBarColor">#0B0D14</item>
+        <item name="android:colorAccent">#B7A4FF</item>
+
+        <!-- Значки системных полос — светлые: полосы у нас тёмные. -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="android:colorControlActivated">#B7A4FF</item>
+        <item name="android:colorControlHighlight">#33B7A4FF</item>
+        <item name="android:textColorHighlight">#4DB7A4FF</item>
+        <item name="android:textColorPrimary">#F5F3FF</item>
+        <item name="android:textColorSecondary">#C7C4D8</item>
+        <item name="android:textColorHint">#9394AE</item>
+
+        <!-- Диалоги системы (подтверждение установки, выбор из списка) — тоже тёмные:
+             белое окно посреди тёмного приложения бьёт по глазам сильнее всего. -->
+        <item name="android:colorBackground">#0B0D14</item>
+        <item name="android:alertDialogTheme">@style/DustoreDialog</item>
+    </style>
+    <!-- Native confirmations follow the same obsidian/lavender palette. -->
+    <style name="DustoreDialog" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorBackground">#181C2B</item>
+        <item name="android:windowBackground">@drawable/dialog_back</item>
+        <item name="android:colorAccent">#B7A4FF</item>
+        <item name="android:textColorPrimary">#F5F3FF</item>
+        <item name="android:textColorSecondary">#C7C4D8</item>
+    </style>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Незашифрованные соединения запрещены везде, кроме одного адреса — самого телефона.
+
+    Веб-сборки игр запускаются со своего сервера на 127.0.0.1: наружу этот адрес не ведёт,
+    трафик не покидает устройство, и шифровать его не от кого. А вот сайт и сервер отзывов
+    по-прежнему обязаны ходить только по HTTPS — на то тут и стоит cleartextTrafficPermitted
+    в false для всего остального.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

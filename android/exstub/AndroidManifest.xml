@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Стаб игры eX — шаблон.
+
+    Имя пакета и подпись здесь заглушки: на телефоне DustoreX подменяет их на свои
+    (ExAxml), кладёт иконку игры и подписывает файл сам. Значок на рабочем столе открывает
+    игру внутри DustoreX через eX; сам стаб не умеет ничего другого и не просит ни одного
+    разрешения.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="ru.exepc.exstub.PLACEHOLDER"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+    <queries>
+        <package android:name="ru.dustore.launcher" />
+    </queries>
+
+    <application
+        android:label="EXGAME_LABEL"
+        android:icon="@mipmap/icon"
+        android:allowBackup="false">
+
+        <activity
+            android:name="ru.exepc.exstub.Main"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:noHistory="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- По этому действию DustoreX видит, что стаб установлен. -->
+            <intent-filter>
+                <action android:name="ru.exepc.ex.STUB" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

@@ -1,0 +1,102 @@
+name: Android build, unit checks and emulator smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ['android/**', 'ci/android_smoke.sh', '.github/workflows/android.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: APK ${{ matrix.edition }}
+    runs-on: windows-2022
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [Free, Prime]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Android SDK packages
+        shell: pwsh
+        run: |
+          $sdk = $env:ANDROID_HOME
+          $manager = Get-ChildItem "$sdk\cmdline-tools" -Recurse -Filter sdkmanager.bat | Select-Object -First 1
+          "y`ny`ny`ny`ny`n" | & $manager.FullName --sdk_root=$sdk "build-tools;36.0.0" "platforms;android-36" | Out-Null
+          "DUSTORE_ANDROID_SDK=$sdk" | Out-File -Append $env:GITHUB_ENV -Encoding utf8
+          "DUSTORE_JDK=$env:JAVA_HOME" | Out-File -Append $env:GITHUB_ENV -Encoding utf8
+      - name: Throwaway signing keys (never the release keys)
+        shell: pwsh
+        run: |
+          & "$env:JAVA_HOME\bin\keytool.exe" -genkeypair -keystore android\dustore.keystore -storepass dustore -keypass dustore -alias ci -keyalg RSA -keysize 2048 -validity 30 -dname "CN=Dustore CI"
+          powershell -ExecutionPolicy Bypass -File android\make-stub-key.ps1
+      - name: Build APK
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File android\build.ps1 -Edition ${{ matrix.edition }}
+      - name: JVM checks
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File android\tests\run-tests.ps1 | Out-Null
+          $cp = "android\tests\build;android\tests\lib\json.jar;$env:DUSTORE_ANDROID_SDK\platforms\android-36\android.jar"
+          $failed = 0
+          foreach ($mode in 'memory','performance','behavior') {
+            & "$env:JAVA_HOME\bin\java.exe" "-Dstdout.encoding=UTF-8" -cp $cp ru.dustore.launcher.ExTests $mode
+            if ($LASTEXITCODE -ne 0) { $failed++ }
+          }
+          & "$env:JAVA_HOME\bin\java.exe" "-Dstdout.encoding=UTF-8" -cp $cp ru.dustore.launcher.ExTests axml android\res\raw\exstub.bin
+          if ($LASTEXITCODE -ne 0) { $failed++ }
+          exit $failed
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ matrix.edition }}
+          path: android/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  emulator:
+    name: Emulator ${{ matrix.edition }} API ${{ matrix.api }}
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [Free, Prime]
+        api: [34]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk-${{ matrix.edition }}
+          path: apk
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Smoke on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: bash ci/android_smoke.sh "$(ls apk/*.apk | head -1)" report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-smoke-${{ matrix.edition }}-api${{ matrix.api }}
+          path: report/
+          retention-days: 14

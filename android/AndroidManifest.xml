@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Dustore for Android.
+
+    Началось это как окно на dustore.ru: игры для Windows на Android не запускаются, и
+    притворяться было нечем. Но на сайте есть игры и в виде apk — а такую игру телефон
+    умеет скачать, поставить и открыть. Поэтому здесь теперь то же, что и на компьютере:
+    магазин, библиотека и игры eXen. Аккаунт eXepc синхронизирует библиотеку.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="ru.dustore.launcher"
+          android:versionCode="33"
+          android:versionName="5.21">
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--
+        Якорь для долгой работы eX (сборка системы, эмуляция): уведомление о работе в
+        фоне — единственное, что не даёт телефону заморозить приложение, когда гаснет экран.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--
+        Установка скачанной игры. Разрешение только на право ПОПРОСИТЬ: саму установку
+        всё равно подтверждает человек, и до первого согласия система не пустит.
+    -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <!--
+        Видимость установленных приложений.
+
+        С Android 11 приложение по умолчанию не видит остальные — и не может ни проверить,
+        что игра установлена, ни открыть её. Спрашивается не «все подряд»
+        (QUERY_ALL_PACKAGES), а только то, что имеет свой значок и запускается: ровно то,
+        чем библиотека и занимается.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <!-- Стабы игр eX: по этому действию видно, что игра установлена как приложение. -->
+        <intent>
+            <action android:name="ru.exepc.ex.STUB" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".DustoreApp"
+        android:appCategory="game"
+        android:isGame="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:extractNativeLibs="true"
+        android:allowBackup="true"
+        android:supportsRtl="false">
+
+        <meta-data android:name="ru.dustore.publisher" android:value="eXepc" />
+        <meta-data android:name="android.game_mode_config" android:resource="@xml/game_mode_config" />
+        <meta-data android:name="ru.dustore.product" android:value="DustoreX by eXepc" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+                Ссылки dustore.ru открываются в лаунчере.
+
+                На странице каждой игры сайт показывает QR-код со словами «сканируй — и
+                скачаешь прямо на телефон». Раньше он вёл в браузер, где скачанный файл
+                оставался просто файлом в «Загрузках»: ни библиотеки, ни установки в один
+                тап, ни отзыва. Теперь такая ссылка открывается здесь — и путь от QR-кода
+                до отзыва не прерывается.
+            -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="dustore.ru" />
+                <data android:scheme="http" android:host="dustore.ru" />
+                <data android:scheme="https" android:host="www.dustore.ru" />
+                <data android:scheme="http" android:host="www.dustore.ru" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Окно веб-игры. Отдельное от главного, потому что игра занимает экран целиком,
+            а её закрытие — это конец партии, по которому считается сыгранное время.
+        -->
+        <activity
+            android:name=".JoypadActivity"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name=".GameActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode"
+            android:hardwareAccelerated="true" />
+
+        <!--
+            Окно игры, переведённой через eX. Открывается и с телефона, и по кабелю с
+            компьютера — сразу за перевозкой, чтобы человек увидел результат, а не искал
+            игру на маленьком экране.
+        -->
+        <!--
+            Своя задача и своя подпись в «недавних»: со значка игры человек ждёт игру, а
+            не лаунчер. Стаб зовёт это окно действием ru.exepc.ex.PLAY с id игры.
+        -->
+        <activity
+            android:name=".ExActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="ru.exepc.ex.play"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode">
+
+            <intent-filter>
+                <action android:name="ru.exepc.ex.PLAY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Отдаёт скачанный apk системному установщику. Наружу закрыт: доступ выдаётся
+            поштучно вместе с намерением и живёт до конца установки.
+        -->
+        <service
+            android:name=".ExService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <provider
+            android:name=".Files"
+            android:authorities="ru.dustore.launcher.files"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+    </application>
+</manifest>
