@@ -36,7 +36,10 @@ jobs:
       - name: Throwaway signing keys (never the release keys)
         shell: pwsh
         run: |
-          & "$env:JAVA_HOME\bin\keytool.exe" -genkeypair -keystore android\dustore.keystore -storepass dustore -keypass dustore -alias ci -keyalg RSA -keysize 2048 -validity 30 -dname "CN=Dustore CI"
+          $pass = [guid]::NewGuid().ToString('N')
+          "DUSTORE_KS_PASS=$pass" | Out-File -Append $env:GITHUB_ENV -Encoding utf8
+          $env:DUSTORE_KS_PASS = $pass
+          & "$env:JAVA_HOME\bin\keytool.exe" -genkeypair -keystore android\dustore.keystore -storepass $env:DUSTORE_KS_PASS -keypass $env:DUSTORE_KS_PASS -alias ci -keyalg RSA -keysize 2048 -validity 30 -dname "CN=Dustore CI"
           powershell -ExecutionPolicy Bypass -File android\make-stub-key.ps1
       - name: Build APK
         shell: pwsh

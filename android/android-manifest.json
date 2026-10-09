@@ -12,8 +12,8 @@
   },
   {
    "path": "build.ps1",
-   "bytes": 9001,
-   "sha256": "dc16d0d5bd96007b926cc307144088518ea7f7b4feae8d9a894a5934e05f9b63"
+   "bytes": 9037,
+   "sha256": "30804a19fc471940640f8485caf54a9f25bb00c0c6f59f1a395cab44d6fb1de0"
   },
   {
    "path": "make-stub-key.ps1",

@@ -195,8 +195,8 @@ Step "signing"
 Run "$buildTool\apksigner.bat" @(
     "sign",
     "--ks", $keystore,
-    "--ks-pass", "pass:dustore",
-    "--key-pass", "pass:dustore",
+    "--ks-pass", ("pass:" + $env:DUSTORE_KS_PASS),
+    "--key-pass", ("pass:" + $env:DUSTORE_KS_PASS),
     "--out", $outApk,
     "$out\aligned.apk"
 )
