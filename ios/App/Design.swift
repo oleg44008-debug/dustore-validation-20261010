@@ -103,86 +103,47 @@ enum MotionPreference: String, CaseIterable, Identifiable {
 struct PrimeBackdrop: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Theme.background
-            RadialGradient(colors: [Theme.selection.opacity(0.1), .clear], center: .topTrailing,
-                           startRadius: 10, endRadius: 480)
+            ZStack(alignment: .topTrailing) {
+                Theme.background
+                RadialGradient(colors: [Theme.selection.opacity(0.1), .clear], center: .topTrailing,
+                               startRadius: 10, endRadius: 480)
+            }.ignoresSafeArea()
+            // Inside the safe area, so that the scene stands on the tab bar instead of behind it.
             if Season.current != .regular { SeasonSky() }
-        }.ignoresSafeArea().accessibilityHidden(true)
+        }.accessibilityHidden(true)
     }
 }
 
-/// The seasonal ornament behind a screen: a moon with bats, or still snow. It never moves
-/// and never takes a touch.
+/// The season's scene behind a screen: a moonlit hill with its house, lanterns and ghosts,
+/// or a snowed-in clearing with a dressed tree. It is the scene the Windows launcher draws,
+/// kept as a picture; it stands in the bottom trailing corner, never moves and never takes
+/// a touch.
 struct SeasonSky: View {
+    private static let scene: UIImage? = {
+        switch Season.current {
+        case .halloween: return UIImage(named: "season-halloween")
+        case .newYear: return UIImage(named: "season-newyear")
+        default: return nil
+        }
+    }()
+
+    /// Where the scene stands on a screen of the given size: no taller than 46 % of it.
+    static func place(in size: CGSize, picture: CGSize) -> CGRect {
+        let height = min(size.height * 0.46, 400)
+        let width = height * picture.width / max(1, picture.height)
+        return CGRect(x: size.width - width, y: size.height - height, width: width, height: height)
+    }
+
     var body: some View {
-        Canvas { context, size in
-            if Season.current == .halloween { SeasonSky.moon(&context, size) }
-            else if Season.current == .newYear { SeasonSky.snow(&context, size) }
-        }.allowsHitTesting(false)
-    }
-
-    private static func moon(_ context: inout GraphicsContext, _ size: CGSize) {
-        // Beside the screen title, under the edition mark.
-        let radius: CGFloat = 30
-        let centre = CGPoint(x: size.width - 64, y: 164)
-        let halo = CGRect(x: centre.x - radius * 3, y: centre.y - radius * 3, width: radius * 6, height: radius * 6)
-        context.fill(Path(ellipseIn: halo), with: .radialGradient(
-            Gradient(colors: [Color(hex: 0xFF9A3D).opacity(0.16), .clear]), center: centre, startRadius: 0, endRadius: radius * 3))
-        context.fill(Path(ellipseIn: CGRect(x: centre.x - radius, y: centre.y - radius, width: radius * 2, height: radius * 2)),
-                     with: .color(Color(hex: 0xFFE2A8).opacity(0.14)))
-        let crater = GraphicsContext.Shading.color(Color(hex: 0x0E0A10).opacity(0.08))
-        context.fill(Path(ellipseIn: CGRect(x: centre.x - radius * 0.46, y: centre.y - radius * 0.38, width: radius * 0.42, height: radius * 0.42)), with: crater)
-        context.fill(Path(ellipseIn: CGRect(x: centre.x + radius * 0.14, y: centre.y + radius * 0.10, width: radius * 0.30, height: radius * 0.30)), with: crater)
-
-        let wing = GraphicsContext.Shading.color(Color(hex: 0x6A5390).opacity(0.55))
-        context.fill(bat(at: CGPoint(x: centre.x - radius * 1.7, y: centre.y - radius * 0.7), span: 26, tilt: -9), with: wing)
-        context.fill(bat(at: CGPoint(x: centre.x - radius * 0.3, y: centre.y - radius * 1.6), span: 17, tilt: 7), with: wing)
-    }
-
-    // Half a bat, head to tail, on a unit wingspan; the other half is its mirror.
-    private static let batHalf: [CGPoint] = [
-        CGPoint(x: 0, y: -0.10), CGPoint(x: 0.035, y: -0.07), CGPoint(x: 0.065, y: -0.17), CGPoint(x: 0.095, y: -0.05),
-        CGPoint(x: 0.30, y: -0.15), CGPoint(x: 0.50, y: -0.06), CGPoint(x: 0.39, y: 0.02), CGPoint(x: 0.30, y: -0.01),
-        CGPoint(x: 0.24, y: 0.08), CGPoint(x: 0.15, y: 0.03), CGPoint(x: 0.09, y: 0.11), CGPoint(x: 0, y: 0.16)
-    ]
-
-    private static func bat(at centre: CGPoint, span: CGFloat, tilt: CGFloat) -> Path {
-        var outline = batHalf
-        outline.append(contentsOf: batHalf.dropFirst().dropLast().reversed().map { CGPoint(x: -$0.x, y: $0.y) })
-        var path = Path()
-        path.addLines(outline)
-        path.closeSubpath()
-        let transform = CGAffineTransform(translationX: centre.x, y: centre.y).rotated(by: tilt * .pi / 180).scaledBy(x: span, y: span)
-        return path.applying(transform)
-    }
-
-    private static func snow(_ context: inout GraphicsContext, _ size: CGSize) {
-        // The same flakes on every draw: a small fixed-seed generator, positions as fractions of the screen.
-        var state: UInt64 = 2027
-        func next() -> CGFloat {
-            state = state &* 6364136223846793005 &+ 1442695040888963407
-            return CGFloat((state >> 33) % 10_000) / 10_000
-        }
-        let ink = Color(hex: 0xD8EAFB)
-        for _ in 0..<40 {
-            let x = next() * size.width
-            let fall = next()
-            let y = fall * fall * size.height
-            let flake = 1.4 + next() * 3.2
-            let alpha = 0.08 + Double(next()) * 0.14
-            if flake < 3.2 {
-                context.fill(Path(ellipseIn: CGRect(x: x - flake / 2, y: y - flake / 2, width: flake, height: flake)), with: .color(ink.opacity(alpha)))
-            } else {
-                var arms = Path()
-                let radius = flake * 1.5, turn = next() * 60
-                for arm in 0..<3 {
-                    let angle = (turn + CGFloat(arm) * 60) * .pi / 180
-                    arms.move(to: CGPoint(x: x - cos(angle) * radius, y: y - sin(angle) * radius))
-                    arms.addLine(to: CGPoint(x: x + cos(angle) * radius, y: y + sin(angle) * radius))
-                }
-                context.stroke(arms, with: .color(ink.opacity(alpha + 0.06)), style: StrokeStyle(lineWidth: 1, lineCap: .round))
+        GeometryReader { geometry in
+            if let scene = SeasonSky.scene {
+                let place = SeasonSky.place(in: geometry.size, picture: scene.size)
+                Image(uiImage: scene).resizable().interpolation(.high)
+                    .frame(width: place.width, height: place.height)
+                    .position(x: place.midX, y: place.midY)
+                    .opacity(0.75)   // titles lie straight on the backdrop
             }
-        }
+        }.clipped().allowsHitTesting(false)
     }
 }
 

@@ -97,7 +97,7 @@ final class LibraryScreen extends ScrollView {
         this.library = library;
         this.host = host;
 
-        setBackgroundColor(Ui.BACK);
+        SeasonScene.apply(this);
 
         // Врезки — на самом списке, а не на его содержимом: заголовок иначе уезжает под
         // часы, а последняя карточка прячется за навигационной полосой.

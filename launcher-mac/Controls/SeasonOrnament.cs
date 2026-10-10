@@ -7,8 +7,8 @@ using DustoreLauncherV.Mac.Services;
 namespace DustoreLauncherV.Mac.Controls;
 
 /// <summary>
-/// The seasonal ornament, drawn behind the content and never in its way: over the pages a
-/// moon with bats or still snow, at the top of the sidebar a cobweb or a string of lights.
+/// The seasonal ornament, drawn behind the content: behind the pages the season's scene, at
+/// the top of the sidebar a cobweb with its spider or a string of lights.
 /// It draws nothing outside a season.
 /// </summary>
 public sealed class SeasonOrnament : Control
@@ -68,99 +68,56 @@ public sealed class SeasonOrnament : Control
             if (Season.Current == SeasonKind.Halloween) DrawWeb(context, width);
             else DrawLights(context, width);
         }
-        else if (width >= 320 && height >= 240)
+        else if (width >= 320 && height >= 240) DrawScene(context, width, height);
+    }
+
+    // The season's scene is the one the Windows launcher draws, kept as a picture: a moonlit
+    // hill with its house, lanterns and ghosts, or a snowed-in clearing with a dressed tree.
+    // It stands in the bottom right corner of the pages, where they are empty more often than not.
+    private static Avalonia.Media.Imaging.Bitmap? _scene;
+    private static SeasonKind _sceneFor = SeasonKind.None;
+
+    private static Avalonia.Media.Imaging.Bitmap? Scene()
+    {
+        if (_sceneFor == Season.Current) return _scene;
+        _sceneFor = Season.Current;
+        _scene = null;
+        try
         {
-            if (Season.Current == SeasonKind.Halloween) DrawMoon(context, width);
-            else DrawSnow(context, width, height);
+            string name = Season.Current == SeasonKind.Halloween ? "season-halloween.png" : "season-newyear.png";
+            using var stream = Avalonia.Platform.AssetLoader.Open(new Uri("avares://DustoreLauncherV.Mac/Assets/" + name));
+            _scene = new Avalonia.Media.Imaging.Bitmap(stream);
         }
+        catch (Exception) { }   // no picture: the pages simply stay plain
+        return _scene;
     }
 
-    // ------------------------------------------------------------------ the sky ----
-
-    private static void DrawMoon(DrawingContext context, double width)
+    /// <summary>Where the scene stands in a page of the given size: bottom right, smaller in a short window.</summary>
+    public static Rect ScenePlace(double width, double height, double pictureWidth, double pictureHeight)
     {
-        // In the header, between the page title and the search field; a narrow window has no room for it.
-        if (width < 700) return;
-        const double radius = 34;
-        var centre = new Point(width - 348, 74);
-        var glow = new RadialGradientBrush
-        {
-            GradientStops = { new GradientStop(Color.FromArgb(34, 0xFF, 0x9A, 0x3D), 0), new GradientStop(Color.FromArgb(0, 0xFF, 0x9A, 0x3D), 1) }
-        };
-        context.DrawEllipse(glow, null, centre, radius * 3.2, radius * 3.2);
-        context.DrawEllipse(new SolidColorBrush(Color.FromArgb(30, 0xFF, 0xE2, 0xA8)), null, centre, radius, radius);
-        var crater = new SolidColorBrush(Color.FromArgb(16, 0x0E, 0x0A, 0x10));
-        context.DrawEllipse(crater, null, new Point(centre.X - radius * 0.25, centre.Y - radius * 0.17), radius * 0.21, radius * 0.21);
-        context.DrawEllipse(crater, null, new Point(centre.X + radius * 0.29, centre.Y + radius * 0.25), radius * 0.15, radius * 0.15);
-        context.DrawEllipse(crater, null, new Point(centre.X - radius * 0.10, centre.Y + radius * 0.48), radius * 0.10, radius * 0.10);
-
-        var wing = new SolidColorBrush(Color.FromArgb(130, 0x55, 0x40, 0x75));
-        DrawBat(context, wing, new Point(centre.X - radius * 1.55, centre.Y - radius * 0.62), 30, -9);
-        DrawBat(context, wing, new Point(centre.X - radius * 0.20, centre.Y - radius * 1.48), 20, 7);
-        DrawBat(context, wing, new Point(centre.X + radius * 1.30, centre.Y - radius * 0.20), 14, 14);
+        // Drawn for a page about 820 points tall.
+        double scale = Math.Clamp(height / 820.0, 0.55, 1.0);
+        double sceneHeight = 720 * scale, sceneWidth = sceneHeight * pictureWidth / Math.Max(1, pictureHeight);
+        return new Rect(width - sceneWidth, height - sceneHeight, sceneWidth, sceneHeight);
     }
 
-    // Half a bat, head to tail, on a unit wingspan; the other half is its mirror.
-    private static readonly Point[] BatHalf =
+    private static void DrawScene(DrawingContext context, double width, double height)
     {
-        new(0, -0.10), new(0.035, -0.07), new(0.065, -0.17), new(0.095, -0.05), new(0.30, -0.15), new(0.50, -0.06),
-        new(0.39, 0.02), new(0.30, -0.01), new(0.24, 0.08), new(0.15, 0.03), new(0.09, 0.11), new(0, 0.16)
-    };
-
-    private static readonly StreamGeometry Bat = BuildBat();
-
-    private static StreamGeometry BuildBat()
-    {
-        var geometry = new StreamGeometry();
-        using var figure = geometry.Open();
-        figure.BeginFigure(BatHalf[0], true);
-        for (int i = 1; i < BatHalf.Length; i++) figure.LineTo(BatHalf[i]);
-        for (int i = BatHalf.Length - 2; i >= 1; i--) figure.LineTo(new Point(-BatHalf[i].X, BatHalf[i].Y));
-        figure.EndFigure(true);
-        return geometry;
-    }
-
-    private static void DrawBat(DrawingContext context, IBrush brush, Point centre, double span, double tilt)
-    {
-        var transform = Matrix.CreateScale(span, span) * Matrix.CreateRotation(tilt * Math.PI / 180) * Matrix.CreateTranslation(centre.X, centre.Y);
-        using (context.PushTransform(transform)) context.DrawGeometry(brush, null, Bat);
-    }
-
-    private static void DrawSnow(DrawingContext context, double width, double height)
-    {
-        // The same flakes on every paint: a fixed seed, positions as fractions of the sky.
-        var random = new Random(2027);
-        for (int i = 0; i < 54; i++)
-        {
-            double x = random.NextDouble() * width;
-            double fall = random.NextDouble();
-            double y = fall * fall * height;
-            double size = 1.4 + random.NextDouble() * 3.4;
-            byte alpha = (byte)(22 + random.Next(36));
-            var ink = Color.FromArgb(alpha, 0xD8, 0xEA, 0xFB);
-            if (size < 3.2) context.DrawEllipse(new SolidColorBrush(ink), null, new Point(x, y), size / 2, size / 2);
-            else
-            {
-                var pen = new Pen(new SolidColorBrush(Color.FromArgb((byte)(alpha + 16), 0xD8, 0xEA, 0xFB)), 1, lineCap: PenLineCap.Round);
-                double radius = size * 1.5, turn = random.NextDouble() * 60;
-                for (int arm = 0; arm < 3; arm++)
-                {
-                    double angle = (turn + arm * 60) * Math.PI / 180;
-                    double dx = Math.Cos(angle) * radius, dy = Math.Sin(angle) * radius;
-                    context.DrawLine(pen, new Point(x - dx, y - dy), new Point(x + dx, y + dy));
-                }
-            }
-        }
+        if (Scene() is not { } scene) return;
+        // Game names and captions lie straight on the page, so the scene is held back a little.
+        using (context.PushClip(new Rect(0, 0, width, height)))
+        using (context.PushOpacity(0.72))
+            context.DrawImage(scene, ScenePlace(width, height, scene.PixelSize.Width, scene.PixelSize.Height));
     }
 
     // ----------------------------------------------------------------- the rail ----
 
     private static void DrawWeb(DrawingContext context, double width)
     {
-        const double reach = 70;
+        const double reach = 96;
         const int spokes = 5;
         var corner = new Point(width - 1, 0);
-        var pen = new Pen(new SolidColorBrush(Color.FromArgb(40, 0xFF, 0xFF, 0xFF)), 1);
+        var pen = new Pen(new SolidColorBrush(Color.FromArgb(72, 0xFF, 0xFF, 0xFF)), 1.1);
         var ends = new Point[spokes];
         for (int i = 0; i < spokes; i++)
         {
@@ -186,8 +143,8 @@ public sealed class SeasonOrnament : Control
         context.DrawGeometry(null, pen, rings);
 
         // The tenant, on a thread of its own, clear of the brand's lettering.
-        double x = width - 22, drop = 78, size = 3;
-        var body = new SolidColorBrush(Color.FromArgb(78, 0xFF, 0xFF, 0xFF));
+        double x = width - 22, drop = 96, size = 4.4;
+        var body = new SolidColorBrush(Color.FromArgb(150, 0xFF, 0xFF, 0xFF));
         var leg = new Pen(body, 1);
         context.DrawLine(pen, new Point(x, 0), new Point(x, drop - size));
         for (int side = -1; side <= 1; side += 2)
@@ -210,7 +167,7 @@ public sealed class SeasonOrnament : Control
 
     private void DrawLights(DrawingContext context, double width)
     {
-        const double step = 34, top = 3, dip = 7, radius = 2.6;
+        const double step = 36, top = 2, dip = 6, radius = 3.4;
         int count = Math.Max(1, (int)((width - 8) / step));
         double left = (width - count * step) / 2;
 
@@ -234,7 +191,7 @@ public sealed class SeasonOrnament : Control
             if (lit)
                 context.DrawEllipse(new RadialGradientBrush
                 {
-                    GradientStops = { new GradientStop(Color.FromArgb(84, colour.R, colour.G, colour.B), 0), new GradientStop(Color.FromArgb(0, colour.R, colour.G, colour.B), 1) }
+                    GradientStops = { new GradientStop(Color.FromArgb(140, colour.R, colour.G, colour.B), 0), new GradientStop(Color.FromArgb(0, colour.R, colour.G, colour.B), 1) }
                 }, null, centre, radius * 4, radius * 4);
             context.DrawEllipse(new SolidColorBrush(lit ? colour : Color.FromArgb(110, colour.R, colour.G, colour.B)), null, centre, radius, radius * 1.15);
         }

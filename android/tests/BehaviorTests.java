@@ -53,6 +53,12 @@ public final class BehaviorTests {
         check("the rest of the year is the ordinary look", quiet);
         check("the switch turns a season off", Season.decide(10, false, null) == Season.NONE && Season.decide(10, true, null) == Season.HALLOWEEN);
         check("an explicit request wins on any date", Season.decide(7, false, "newyear") == Season.NEW_YEAR && Season.decide(10, true, "none") == Season.NONE);
+        float[] phone = SeasonScene.place(1080, 2000, 3f, 2100, 1080);
+        check("the season's scene stands in the bottom right corner and keeps its proportions",
+                Math.abs(phone[0] + phone[2] - 1080f) < 0.01f && Math.abs(phone[1] + phone[3] - 2000f) < 0.01f
+                        && Math.abs(phone[2] / phone[3] - 2100f / 1080f) < 0.001f);
+        check("the scene takes no more than 46 % of a screen and no more than 400 dp",
+                phone[3] <= 2000 * 0.46f + 0.01f && SeasonScene.place(1600, 4000, 2f, 2100, 1080)[3] <= 800.01f);
         // ULTRA for eX games: the size a game is drawn at, and what a session teaches.
         check("the standard size is the one tuned on a phone", ExScale.size(false, false)[0] == 800 && ExScale.size(false, false)[1] == 450
                 && ExScale.size(true, false)[0] == 640 && ExScale.size(true, false)[1] == 360);

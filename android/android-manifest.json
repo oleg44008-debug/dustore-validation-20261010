@@ -81,6 +81,16 @@
    "sha256": "0f4036a819c5fcc679078702564b9878ca2f5f39f5e3eb1dcb8b5a74eeb48587"
   },
   {
+   "path": "res/drawable-nodpi/season_halloween.png",
+   "bytes": 759747,
+   "sha256": "e855ae71434d7acd47e748b2dcf11fa3184622cf6a61b32c18d37ace58d470a1"
+  },
+  {
+   "path": "res/drawable-nodpi/season_newyear.png",
+   "bytes": 970025,
+   "sha256": "d7492523078a1e9931e440051d6947cffc53636151daa781a1cbd3b40e631e54"
+  },
+  {
    "path": "res/mipmap-hdpi/ic_launcher.png",
    "bytes": 5247,
    "sha256": "992cbc570309468f4559504c182e81c16281931f5b18e16a6e91c31dfb5424de"
@@ -367,8 +377,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/LibraryScreen.java",
-   "bytes": 33737,
-   "sha256": "b396294bd9ef7f2253455a8a42648e3dd55501f9af512687c5ec0b61a15fc311"
+   "bytes": 34090,
+   "sha256": "5586a26bd4890f1b406ad8a4ff704d862c1a3ebf41afe1835168d269f8ca9040"
   },
   {
    "path": "src/ru/dustore/launcher/LibraryState.java",
@@ -417,8 +427,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/PcScreen.java",
-   "bytes": 43763,
-   "sha256": "7ee614bc4ce5ec1721ef36ee0a08005feab01b1ae65328e401c05b6e03d7fdf2"
+   "bytes": 43759,
+   "sha256": "be64172b62fd7f91c9e21b11ac2f9620ea453d8b4bc51d7486838ed269febf9d"
   },
   {
    "path": "src/ru/dustore/launcher/PremiumNav.java",
@@ -449,6 +459,11 @@
    "path": "src/ru/dustore/launcher/SeasonArt.java",
    "bytes": 4236,
    "sha256": "83761bc1f21eeb8c38b9d06ae465bae8e1ee4c169f944f3287ec71e256cb8697"
+  },
+  {
+   "path": "src/ru/dustore/launcher/SeasonScene.java",
+   "bytes": 4418,
+   "sha256": "a10e8b0fb09fc161720bbabe6c0b48a47fdf1ddb06453c2e8340ff2c90e35119"
   },
   {
    "path": "src/ru/dustore/launcher/Speaker.java",
@@ -507,8 +522,8 @@
   },
   {
    "path": "tests/BehaviorTests.java",
-   "bytes": 11017,
-   "sha256": "e473c26ab11185cc470e4d4164c067576ccc0d4311d2ed8393bd1405a04e092a"
+   "bytes": 11580,
+   "sha256": "001ebaa8443800800eec99ed0c5ee8490b59a093f67c67040293fd6418c45aa7"
   },
   {
    "path": "tests/ExTests.java",

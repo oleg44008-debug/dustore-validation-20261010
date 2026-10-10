@@ -4,13 +4,13 @@
   "freezes": {
     "ios": {
       "owner": "foundation",
-      "milestone": "Claude 2026-10-10 seasonal looks (unchanged)",
-      "snapshottedAtUtc": "2026-10-10T19:59:31.669565+00:00"
+      "milestone": "Season scenes as pictures, 2026-10-11",
+      "snapshottedAtUtc": "2026-10-10T22:39:10.401245+00:00"
     },
     "mac": {
       "owner": "mac_design",
-      "milestone": "Claude 2026-10-10 ULTRA render scale",
-      "snapshottedAtUtc": "2026-10-10T19:59:31.669539+00:00"
+      "milestone": "Season scenes as pictures, 2026-10-11",
+      "snapshottedAtUtc": "2026-10-10T22:39:10.401229+00:00"
     }
   },
   "sourceScope": "Only the supplied isolated Prime/Source snapshot; both editions are built with explicit configurations.",
@@ -79,8 +79,8 @@
       "path": "ios/App/Design.swift",
       "source": "DustoreIOS/App/Design.swift",
       "platform": "ios",
-      "bytes": 17290,
-      "sha256": "52f856ce659a1ee20d97559071c7680a0aa026edb28b2fd249f38bd14b3ad1a7"
+      "bytes": 14584,
+      "sha256": "717bb18e772e08adae2fe01d3708d64f085e5b6ac257d901850a365b592f3a9e"
     },
     {
       "path": "ios/App/DustoreApp.swift",
@@ -174,6 +174,20 @@
       "sha256": "8aeb15758f024609ac90ac818e95a0c96ffd58218c618ce2dda445ca2d429bd4"
     },
     {
+      "path": "ios/App/season-halloween.png",
+      "source": "DustoreIOS/App/season-halloween.png",
+      "platform": "ios",
+      "bytes": 759747,
+      "sha256": "e855ae71434d7acd47e748b2dcf11fa3184622cf6a61b32c18d37ace58d470a1"
+    },
+    {
+      "path": "ios/App/season-newyear.png",
+      "source": "DustoreIOS/App/season-newyear.png",
+      "platform": "ios",
+      "bytes": 970025,
+      "sha256": "d7492523078a1e9931e440051d6947cffc53636151daa781a1cbd3b40e631e54"
+    },
+    {
       "path": "ios/README.md",
       "source": "DustoreIOS/README.md",
       "platform": "ios",
@@ -265,6 +279,20 @@
       "sha256": "69cdb26a75f82302b8f476788a705bbdd6c1ed8d74934e3f05cb4df6a41468d4"
     },
     {
+      "path": "launcher-mac/Assets/season-halloween.png",
+      "source": "DustoreLauncherV-Mac/Assets/season-halloween.png",
+      "platform": "mac",
+      "bytes": 933231,
+      "sha256": "4e8f87675de07db38198ce29a2e641270204b82780fa08a037d5d935be2aa601"
+    },
+    {
+      "path": "launcher-mac/Assets/season-newyear.png",
+      "source": "DustoreLauncherV-Mac/Assets/season-newyear.png",
+      "platform": "mac",
+      "bytes": 1126561,
+      "sha256": "bc3aa524b318700f7371d0486723960a98d620a3f9692a2f475480d5677d238d"
+    },
+    {
       "path": "launcher-mac/Controls/AdaptiveColumns.cs",
       "source": "DustoreLauncherV-Mac/Controls/AdaptiveColumns.cs",
       "platform": "mac",
@@ -324,8 +352,8 @@
       "path": "launcher-mac/Controls/SeasonOrnament.cs",
       "source": "DustoreLauncherV-Mac/Controls/SeasonOrnament.cs",
       "platform": "mac",
-      "bytes": 11564,
-      "sha256": "731b4ea8dd0dc2880300cca69aedf57d86abca30ccfa52a1d46e50d0fa60f05c"
+      "bytes": 9246,
+      "sha256": "64734a9d33e239ecace84aa7c1b6fe4b4aedd9acd6f011655e8a0754c634b436"
     },
     {
       "path": "launcher-mac/Controls/SurfaceMotion.cs",

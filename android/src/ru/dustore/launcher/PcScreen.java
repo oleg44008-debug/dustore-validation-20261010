@@ -75,7 +75,7 @@ final class PcScreen extends ScrollView {
         super(context);
         this.context = context;
 
-        setBackgroundColor(Ui.BACK);
+        SeasonScene.apply(this);
         setClipToPadding(false);
 
         // Содержимое не должно уезжать под часы и под навигационную полосу: врезки
