@@ -34,6 +34,7 @@ struct RootView: View {
                             .navigationTitle("DustoreX").navigationSplitViewColumnWidth(min: 190, ideal: 225, max: 270)
                     } detail: {
                         screen(tab)
+                            .environment(\.brandInSidebar, true)
                             .navigationTitle(Destination.all.first(where: { $0.id == tab })?.title ?? "Библиотека")
                             .navigationBarTitleDisplayMode(.inline)
                             .toolbarBackground(Theme.background, for: .navigationBar)

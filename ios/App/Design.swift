@@ -157,13 +157,26 @@ struct EditionMark: View {
     var body: some View { Chip(text: Edition.name, color: Edition.isPrime ? Theme.selection : Theme.dim) }
 }
 
+/// True where the iPad sidebar already carries the mark, the name and the edition: a
+/// screen's header then starts with its title instead of repeating all three beside it.
+private struct BrandInSidebarKey: EnvironmentKey { static let defaultValue = false }
+extension EnvironmentValues {
+    var brandInSidebar: Bool {
+        get { self[BrandInSidebarKey.self] }
+        set { self[BrandInSidebarKey.self] = newValue }
+    }
+}
+
 struct BrandHeader: View {
     let title: String
     let subtitle: String
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.brandInSidebar) private var brandInSidebar
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            if dynamicType.isAccessibilitySize {
+            if brandInSidebar {
+                EmptyView()
+            } else if dynamicType.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 10) {
                     brand
                     EditionMark()
