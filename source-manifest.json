@@ -4,13 +4,13 @@
   "freezes": {
     "ios": {
       "owner": "foundation",
-      "milestone": "Claude 2026-10-10 iPad header without the repeated brand row",
-      "snapshottedAtUtc": "2026-10-10T12:26:07.334123+00:00"
+      "milestone": "Claude 2026-10-10 iPad header change taken back",
+      "snapshottedAtUtc": "2026-10-10T14:12:33.371980+00:00"
     },
     "mac": {
       "owner": "mac_design",
       "milestone": "Claude 2026-10-10 unchanged since command-failure handling",
-      "snapshottedAtUtc": "2026-10-10T12:26:07.334140+00:00"
+      "snapshottedAtUtc": "2026-10-10T14:12:33.371961+00:00"
     }
   },
   "sourceScope": "Only the supplied isolated Prime/Source snapshot; both editions are built with explicit configurations.",
@@ -79,8 +79,8 @@
       "path": "ios/App/Design.swift",
       "source": "DustoreIOS/App/Design.swift",
       "platform": "ios",
-      "bytes": 10663,
-      "sha256": "00b83e4fbe79791c7ca4d1226c750603e8b14fbe1cf285c71ba16e7078c132b7"
+      "bytes": 10103,
+      "sha256": "af06dfea68272ccd16dcc4c608c8d181702988bcf9a7dd857b662adb45e1d706"
     },
     {
       "path": "ios/App/DustoreApp.swift",
@@ -156,8 +156,8 @@
       "path": "ios/App/Views.swift",
       "source": "DustoreIOS/App/Views.swift",
       "platform": "ios",
-      "bytes": 37514,
-      "sha256": "4358060791871a2577d2b7b67e5e04e7774ff6f96fc92e3bdb9e148dc2a8ee5b"
+      "bytes": 37449,
+      "sha256": "a6271faa66139a2bfa09a8ec90024d355f7eca32c1e6a69bae3ca87eacafe183"
     },
     {
       "path": "ios/App/WebViews.swift",
