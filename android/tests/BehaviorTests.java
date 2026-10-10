@@ -53,6 +53,27 @@ public final class BehaviorTests {
         check("the rest of the year is the ordinary look", quiet);
         check("the switch turns a season off", Season.decide(10, false, null) == Season.NONE && Season.decide(10, true, null) == Season.HALLOWEEN);
         check("an explicit request wins on any date", Season.decide(7, false, "newyear") == Season.NEW_YEAR && Season.decide(10, true, "none") == Season.NONE);
+        // ULTRA for eX games: the size a game is drawn at, and what a session teaches.
+        check("the standard size is the one tuned on a phone", ExScale.size(false, false)[0] == 800 && ExScale.size(false, false)[1] == 450
+                && ExScale.size(true, false)[0] == 640 && ExScale.size(true, false)[1] == 360);
+        check("one step lower keeps 16:9", ExScale.size(false, true)[0] * 9 == ExScale.size(false, true)[1] * 16
+                && ExScale.size(true, true)[0] * 9 == ExScale.size(true, true)[1] * 16 && ExScale.size(true, true)[0] < 640);
+        check("without ULTRA nothing is lowered", !ExScale.lowered(false, ExScale.FASTER, ExScale.LOWER));
+        check("auto lowers only a game seen to be slow", !ExScale.lowered(true, ExScale.AUTO, ExScale.UNDECIDED) && ExScale.lowered(true, ExScale.AUTO, ExScale.LOWER));
+        check("standard never lowers, faster always does", !ExScale.lowered(true, ExScale.STANDARD, ExScale.LOWER) && ExScale.lowered(true, ExScale.FASTER, ExScale.UNDECIDED));
+        check("a game the smaller size broke is left alone in every mode", !ExScale.lowered(true, ExScale.FASTER, ExScale.KEEP) && !ExScale.lowered(true, ExScale.AUTO, ExScale.KEEP));
+        check("a slow session asks for the smaller size next time", ExScale.learn(ExScale.UNDECIDED, false, 17, 300, 5000) == ExScale.LOWER);
+        check("a smooth session changes nothing", ExScale.learn(ExScale.UNDECIDED, false, 48, 300, 14000) == ExScale.UNDECIDED);
+        check("a short session teaches nothing", ExScale.learn(ExScale.UNDECIDED, false, 9, 40, 300) == ExScale.UNDECIDED
+                && ExScale.learn(ExScale.LOWER, false, 0, 500, 0) == ExScale.LOWER);
+        check("faster frames at the smaller size do not undo it", ExScale.learn(ExScale.LOWER, true, 55, 300, 16000) == ExScale.LOWER);
+        check("a lowered game that showed nothing gets its size back for good", ExScale.learn(ExScale.LOWER, true, 0, 12, 0) == ExScale.KEEP
+                && ExScale.learn(ExScale.KEEP, false, 10, 300, 3000) == ExScale.KEEP);
+        check("closing a working lowered game quickly is not a failure", ExScale.learn(ExScale.LOWER, true, 0, 12, 400) == ExScale.LOWER);
+        check("the median ignores idle seconds and needs enough of them", ExScale.median(new int[] { 0, 30, 0, 31, 29, 30, 30, 28, 30, 32, 30, 33, 0 }, 13) == 30
+                && ExScale.median(new int[] { 20, 21, 22 }, 3) == 0);
+        check("an unknown setting reads as automatic", ExScale.normalize("?").equals(ExScale.AUTO) && ExScale.normalize(null).equals(ExScale.AUTO));
+
         check("a season recolours the action and leaves unknown roles alone",
                 "#FF9A3D".equals(Season.color(Season.HALLOWEEN, "ACTION")) && "#FFD36B".equals(Season.color(Season.NEW_YEAR, "ACTION"))
                         && Season.color(Season.NONE, "ACTION") == null && Season.color(Season.HALLOWEEN, "TEXT") == null);

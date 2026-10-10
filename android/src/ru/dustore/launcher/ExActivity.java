@@ -76,6 +76,38 @@ public final class ExActivity extends Activity {
         return recipe != null && "Unity".equals(recipe.engine) ? 360 : GAME_HEIGHT;
     }
 
+    // ULTRA: в каком размере идёт эта игра. Решается один раз за сеанс — экран, указатель и
+    // сама игра обязаны сойтись в одном числе.
+    private boolean scaleDecided, scaleLowered;
+    private final int[] gameFpsSamples = new int[3600];
+    private int gameFpsCount;
+
+    private String scaleKey() { return folder == null ? null : folder.getName(); }
+
+    private int[] screenSize() {
+        if (!scaleDecided) {
+            scaleDecided = true;
+            int remembered = ExScale.remembered(this, scaleKey());
+            scaleLowered = scaleKey() != null && ExScale.lowered(Prime.maxFps(), ExScale.mode(this), remembered);
+            int[] chosen = ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLowered);
+            String note = ExScale.describe(scaleLowered, chosen, ExScale.mode(this), remembered);
+            if (note != null) say(note);
+        }
+        return ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLowered);
+    }
+
+    /** После сеанса: медленная игра в следующий раз пойдёт в меньшем размере. */
+    private void rememberScale() {
+        if (!scaleDecided || scaleKey() == null || !Prime.maxFps()) return;
+        // Первые секунды — загрузка; о скорости игры они ничего не говорят.
+        int skip = Math.min(gameFpsCount, 20);
+        int[] played = java.util.Arrays.copyOfRange(gameFpsSamples, skip, gameFpsCount);
+        ExDisplay screen = display;
+        int frames = screen == null ? 0 : screen.gameFrames();
+        ExScale.remember(this, scaleKey(), ExScale.learn(ExScale.remembered(this, scaleKey()), scaleLowered,
+                ExScale.median(played, played.length), gameFpsCount, frames));
+    }
+
     private final Handler ui = new Handler(Looper.getMainLooper());
 
     private ExDisplay display;
@@ -507,8 +539,8 @@ public final class ExActivity extends Activity {
             return;
         }
 
-        int x = perMilleX * gameWidth(recipe) / 1000;
-        int y = perMilleY * gameHeight(recipe) / 1000;
+        int x = perMilleX * screenSize()[0] / 1000;
+        int y = perMilleY * screenSize()[1] / 1000;
 
         display.pointerMove(x, y);
 
@@ -751,7 +783,7 @@ public final class ExActivity extends Activity {
     /** Открывает наш экран. Возвращает null при успехе. */
     private String openScreen() {
         pictureNoticeQueued = false;
-        display = new ExDisplay(Ex.runDir(this), gameWidth(recipe), gameHeight(recipe),
+        display = new ExDisplay(Ex.runDir(this), screenSize()[0], screenSize()[1],
                 new ExDisplay.Watcher() {
 
                     @Override
@@ -879,6 +911,7 @@ public final class ExActivity extends Activity {
                     * 1000L / elapsed);
             gameFramesAtSecond = totalGameFrames;
             if (ultra != null) ultra.recordFps(fps, gameFps);
+            if (gameFpsCount < gameFpsSamples.length) gameFpsSamples[gameFpsCount++] = gameFps;
             secondStarted = now;
             ui.post(this::refreshHud);
         }
@@ -1005,8 +1038,8 @@ public final class ExActivity extends Activity {
         String relative = binary.getAbsolutePath()
                 .substring(source.getAbsolutePath().length() + 1).replace('\\', '/');
 
-        int width = gameWidth(recipe);
-        int height = gameHeight(recipe);
+        int width = screenSize()[0];
+        int height = screenSize()[1];
         java.util.List<String> args = recipe == null ? null : recipe.launchArgs(width, height);
         String command = nativeWine
                 ? ExNative.gameCommand(inside, relative, args, width, height)
@@ -1196,6 +1229,7 @@ public final class ExActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        rememberScale();
         renderForeground = false;
         ui.removeCallbacks(refreshLog);
         if (ultra != null) ultra.close();

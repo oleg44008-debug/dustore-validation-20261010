@@ -227,9 +227,9 @@ public sealed class LauncherServices
         if (app is null || !Directory.Exists(app)) throw new InvalidOperationException("Сначала создайте macOS-версию в eX или добавьте готовое приложение .app.");
         var engine = GameLaunchOptions.DetectEngine(app);
         bool ultra = Edition.IsPrime && entry.Ultra;
-        // ULTRA keeps the player's window and resolution; it only lifts the frame cap.
+        // ULTRA keeps the player's window; a Unity game opened full screen renders fewer pixels.
         var arguments = GameLaunchOptions.Arguments(engine, entry.WindowMode, entry.WindowWidth, entry.WindowHeight);
-        if (ultra) arguments = arguments.Concat(UltraMode.Arguments(engine)).ToArray();
+        if (ultra) arguments = UltraMode.ScaleArguments(arguments, engine, UltraMode.RenderScale, out _).Concat(UltraMode.Arguments(engine)).ToArray();
         bool wine = WineRuntime.IsWineWrapper(app);
         if (wine && WineRuntime.WineBinary is { } wineBinary && GameLaunchOptions.WinePrefixOf(app) is { } wrapperPrefix)
             await GameLaunchOptions.ReleaseDisplayCaptureAsync(wineBinary, wrapperPrefix, cancellation).ConfigureAwait(false);

@@ -167,8 +167,25 @@ final class PrimeAppearance {
             ultra.setText(toggle("Игровой режим ULTRA", Prime.maxFps()));
         });
         if (Prime.ON) content.addView(ultra);
+        content.addView(Ui.gap(activity, 8));
+        TextView scale = row("Размер игр eX", false);
+        scale.setText(scaleLabel());
+        scale.setOnClickListener(v -> {
+            int at = java.util.Arrays.asList(ExScale.MODES).indexOf(ExScale.mode(activity));
+            ExScale.setMode(activity, ExScale.MODES[(at + 1) % ExScale.MODES.length]);
+            scale.setText(scaleLabel());
+        });
+        if (Prime.ON) content.addView(scale);
         content.addView(Ui.gap(activity, 10));
-        if (Prime.ON) content.addView(Ui.paragraph(activity, "ULTRA управляет частотой своего окна игры и отрисовкой eX, учитывая нагрев и энергосбережение. Возможности зависят от Android и устройства.", Ui.T_MICRO, Ui.DIM_FIXED));
+        if (Prime.ON) {
+            content.addView(Ui.paragraph(activity, "Что такое ULTRA. Режим Prime, который помогает играм идти плавнее. Он работает, пока игра на экране, и ничего не меняет в телефоне и в других приложениях.", Ui.T_MICRO, Ui.DIM_FIXED));
+            content.addView(Ui.gap(activity, 6));
+            content.addView(Ui.paragraph(activity, "•  Кадры до возможностей экрана: окно игры обновляется на 90–120 Гц, а не на 60, пока телефон не греется и не включено энергосбережение.", Ui.T_MICRO, Ui.DIM_FIXED));
+            content.addView(Ui.gap(activity, 6));
+            content.addView(Ui.paragraph(activity, "•  Игры eX: ULTRA запоминает, как шла игра. Если медленно — в следующий раз она рисуется в меньшем размере: кадров больше, картинка чуть мягче. Не подошло — размер возвращается сам. «Размер игр eX»: «Авто» решает по игре, «Стандарт» никогда не уменьшает, «Быстрее» уменьшает всегда.", Ui.T_MICRO, Ui.DIM_FIXED));
+            content.addView(Ui.gap(activity, 6));
+            content.addView(Ui.paragraph(activity, "Чего ждать: больше всего меньший размер помогает телефонам без ускорения графики. Если игре не хватает процессора, кадров прибавится мало.", Ui.T_MICRO, Ui.DIM_FIXED));
+        }
         content.addView(Ui.gap(activity, 16));
         TextView diagnostic = Ui.button(activity, "Диагностика ULTRA", false);
         diagnostic.setOnClickListener(v -> new android.app.AlertDialog.Builder(activity)
@@ -278,4 +295,9 @@ final class PrimeAppearance {
     }
 
     private static String toggle(String name, boolean on) { return name + "   ·   " + (on ? "Вкл" : "Выкл"); }
+
+    private String scaleLabel() {
+        int at = Math.max(0, java.util.Arrays.asList(ExScale.MODES).indexOf(ExScale.mode(activity)));
+        return "Размер игр eX   ·   " + ExScale.MODE_NAMES[at];
+    }
 }

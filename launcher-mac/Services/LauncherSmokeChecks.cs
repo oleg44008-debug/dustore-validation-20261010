@@ -76,7 +76,24 @@ public static class LauncherSmokeChecks
                 Directory.Delete(quotaDir, true);
             }
             Check(UltraMode.Arguments(GameEngineKind.Unity).Count == 0 && UltraMode.Arguments(GameEngineKind.Godot).Count == 0,
-                "ULTRA keeps the game's resolution, quality and frame pacing");
+                "ULTRA adds no switches of its own to a game");
+            var fullScreen = new[] { "-screen-fullscreen", "1", "-window-mode", "borderless", "-screen-width", "1440", "-screen-height", "900" };
+            var scaled = UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, 85, out var size85);
+            Check(size85 == (1224, 766) && scaled[5] == "1224" && scaled[7] == "766" && scaled[1] == "1" && scaled.Count == fullScreen.Length,
+                "ULTRA renders a full-screen Unity game at 85 % of the display per side and keeps every other switch");
+            UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, 75, out var size75);
+            Check(size75 == (1080, 676), "ULTRA at 75 % keeps the display's proportions and even sizes");
+            UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, 67, out var size67);
+            Check(size67 is { Width: >= 1024, Height: >= 640 } && size67.Value.Width < 1440, "ULTRA never renders below 1024x640");
+            var windowed = new[] { "-screen-fullscreen", "0", "-window-mode", "windowed", "-screen-width", "1280", "-screen-height", "720" };
+            Check(ReferenceEquals(UltraMode.ScaleArguments(windowed, GameEngineKind.Unity, 75, out var none), windowed) && none is null,
+                "ULTRA leaves a windowed game at its own size");
+            var godot = new[] { "--fullscreen", "--resolution", "1440x900" };
+            Check(ReferenceEquals(UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, 100, out _), fullScreen)
+                && ReferenceEquals(UltraMode.ScaleArguments(godot, GameEngineKind.Godot, 75, out var godotSize), godot) && godotSize is null,
+                "ULTRA changes nothing at 100 % and nothing for other engines");
+            var small = new[] { "-screen-fullscreen", "1", "-screen-width", "1024", "-screen-height", "640" };
+            Check(ReferenceEquals(UltraMode.ScaleArguments(small, GameEngineKind.Unity, 67, out _), small), "ULTRA leaves a small display alone");
             string ultraDir = Path.Combine(Path.GetTempPath(), "dustore-ultra-" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(ultraDir);
             var ultraEnv = new Dictionary<string, string>();

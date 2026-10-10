@@ -6,8 +6,10 @@ using System.Text.Json;
 namespace DustoreLauncherV.Mac.Services;
 
 /// <summary>
-/// Prime ULTRA applies measured-scope launch policies without altering the game's image quality.
-/// Graphics backend, cache support and game-engine behavior determine the actual FPS benefit.
+/// Prime ULTRA: launch policies for a game, and the one of them that buys frames — a Unity
+/// game started full screen renders at a share of the display's resolution and stretches the
+/// picture itself. Everything else (graphics route, shader cache, process policy) leaves the
+/// image alone; how much those help depends on the game.
 /// </summary>
 public static class UltraMode
 {
@@ -26,8 +28,53 @@ public static class UltraMode
     public static bool ShouldUseMetal(GameEngineKind engine, GameEntry entry)
         => UsesMetal && (entry.GraphicsMode == "metal" || entry.GraphicsMode is null or "auto" && engine == GameEngineKind.Unity);
 
-    /// <summary>Engine arguments: none — the game keeps its resolution, quality and frame pacing.</summary>
+    /// <summary>Engine arguments of their own: none. The size a game is told is changed by <see cref="ScaleArguments"/>.</summary>
     public static IReadOnlyList<string> Arguments(GameEngineKind engine) => Array.Empty<string>();
+
+    /// <summary>The choices in Settings, as a share of the display per side; 100 leaves the game alone.</summary>
+    public static readonly int[] RenderScales = { 85, 75, 67, 100 };
+    public const int DefaultRenderScale = 85;
+    /// <summary>The user's choice, set from the saved preferences.</summary>
+    public static int RenderScale { get; set; } = DefaultRenderScale;
+
+    public static int NormalizeScale(int percent) => Array.IndexOf(RenderScales, percent) >= 0 ? percent : DefaultRenderScale;
+
+    // Below this the picture stops being "slightly softer".
+    private const int MinimumWidth = 1024, MinimumHeight = 640;
+
+    /// <summary>
+    /// The frames ULTRA can buy: a Unity game that is started full screen is told a smaller
+    /// size, renders that many pixels and stretches the picture over the display itself —
+    /// the very switches the launcher already passes for the window size, with other numbers.
+    /// A windowed game is its own size and is left alone; so is every other engine.
+    /// </summary>
+    public static IReadOnlyList<string> ScaleArguments(IReadOnlyList<string> arguments, GameEngineKind engine, int percent, out (int Width, int Height)? applied)
+    {
+        applied = null;
+        percent = NormalizeScale(percent);
+        if (percent >= 100 || engine != GameEngineKind.Unity) return arguments;
+        int full = IndexOf(arguments, "-screen-fullscreen"), widthAt = IndexOf(arguments, "-screen-width"), heightAt = IndexOf(arguments, "-screen-height");
+        if (full < 0 || full + 1 >= arguments.Count || arguments[full + 1] != "1") return arguments;
+        if (widthAt < 0 || heightAt < 0 || widthAt + 1 >= arguments.Count || heightAt + 1 >= arguments.Count) return arguments;
+        if (!int.TryParse(arguments[widthAt + 1], out int width) || !int.TryParse(arguments[heightAt + 1], out int height)) return arguments;
+        if (width <= MinimumWidth || height <= MinimumHeight) return arguments;
+
+        double scale = Math.Max(percent / 100.0, Math.Max(MinimumWidth / (double)width, MinimumHeight / (double)height));
+        // Less than a tenth off each side is all softness and no frames.
+        if (scale > 0.9) return arguments;
+        int scaledWidth = (int)Math.Round(width * scale / 2, MidpointRounding.AwayFromZero) * 2, scaledHeight = (int)Math.Round(height * scale / 2, MidpointRounding.AwayFromZero) * 2;
+        var result = arguments.ToArray();
+        result[widthAt + 1] = scaledWidth.ToString();
+        result[heightAt + 1] = scaledHeight.ToString();
+        applied = (scaledWidth, scaledHeight);
+        return result;
+    }
+
+    private static int IndexOf(IReadOnlyList<string> arguments, string name)
+    {
+        for (int i = 0; i < arguments.Count; i++) if (arguments[i] == name) return i;
+        return -1;
+    }
 
     private static string CacheDirectory(string kind)
     {

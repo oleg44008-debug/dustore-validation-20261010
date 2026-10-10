@@ -265,7 +265,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public string PerformanceNote => !Edition.IsPrime
         ? "ULTRA, счётчик и ограничение FPS доступны в Prime."
         : !SelectedIsWineGame
-            ? "ULTRA освобождает ресурсы лаунчера во время игры. Нативное приложение сохраняет свои настройки графики и FPS."
+            ? "ULTRA освобождает ресурсы лаунчера во время игры. Игра на Unity в полноэкранном режиме рисуется в меньшем разрешении — кадров больше; остальные сохраняют свои настройки графики."
             : SelectedUltra
                 ? (UltraMode.ShouldUseMetal(SelectedGame!.Engine, SelectedGame.Entry)
                     ? "ULTRA · Metal: Direct3D 10/11 через DXMT, постоянный кэш шейдеров и ресурсы лаунчера освобождены. Разрешение и качество остаются как в игре."
@@ -500,6 +500,22 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         set { _ui.SeasonalThemes = value; _ui.Save(_services.DataDirectory); _ui.Apply(); Notify(nameof(SeasonalThemes)); Notify(nameof(SeasonNote)); }
     }
     public string SeasonNote => "Хеллоуин — весь октябрь, Новый год — с 1 декабря по 31 января. " + Season.Describe(Season.Current);
+
+    /// <summary>ULTRA: how much smaller a full-screen Unity game renders. Shown in Settings.</summary>
+    public IReadOnlyList<string> UltraRenderChoices { get; } = UltraMode.RenderScales.Select(scale => scale >= 100 ? "Не менять · 100 %"
+        : (scale == 85 ? "Баланс" : scale == 75 ? "Больше кадров" : "Максимум кадров") + " · " + scale + " % · на " + (100 - (int)Math.Round(scale * scale / 100.0)) + " % меньше точек").ToArray();
+    public int UltraRenderIndex
+    {
+        get => Math.Max(0, Array.IndexOf(UltraMode.RenderScales, UltraMode.NormalizeScale(_ui.UltraRenderScale)));
+        set
+        {
+            if (value < 0 || value >= UltraMode.RenderScales.Length || !Edition.IsPrime) return;
+            _ui.UltraRenderScale = UltraMode.RenderScales[value];
+            _ui.Save(_services.DataDirectory);
+            UltraMode.RenderScale = _ui.UltraRenderScale;
+            Notify(nameof(UltraRenderIndex));
+        }
+    }
     public string MotionPreferenceNote => _systemReduceMotion
         ? "В macOS включено уменьшение движения: лаунчер соблюдает системный выбор."
         : "Уменьшение движения действует в Free и Prime. Системный выбор macOS также учитывается.";

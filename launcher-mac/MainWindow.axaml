@@ -576,6 +576,32 @@
             </StackPanel>
           </Border>
           <Border Classes="card"><StackPanel Spacing="12"><TextBlock Text="Управление" FontSize="16" FontWeight="SemiBold" /><Button Classes="pill" Content="Полноэкранный режим" Click="Fullscreen_Click" HorizontalAlignment="Left" ToolTip.Tip="⌃⌘F / F11" AutomationProperties.Name="Полноэкранный режим" /><TextBlock Text="⌘F — поиск · ⌘O — добавить игру&#10;⌘1 / ⌘2 / ⌘3 — разделы · ⌘, — настройки&#10;Стрелки — выбрать игру · Enter — играть" Classes="dim" FontSize="12" TextWrapping="Wrap" LineHeight="21" /></StackPanel></Border>
+          <!-- ULTRA: what it is, in plain words, and its one choice. -->
+          <Border Name="UltraCard" Classes="card">
+            <StackPanel Spacing="10">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock FontSize="16" FontWeight="SemiBold" Text="Что такое ULTRA" />
+                <Border Grid.Column="1" Classes="chip" Background="{DynamicResource AccentSubtle}" IsVisible="{Binding IsFree}">
+                  <TextBlock Text="Prime" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource Orchid}" />
+                </Border>
+              </Grid>
+              <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
+                         Text="ULTRA помогает игре идти быстрее. Он включается для каждой игры отдельно — кнопкой ULTRA в её параметрах — и работает, пока игра запущена." />
+              <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
+                         Text="•  Меньше точек — больше кадров. Игра на Unity, открытая на весь экран, рисует картинку чуть меньшего разрешения и растягивает её сама: кадров больше, изображение немного мягче. Для этого выберите в параметрах игры полноэкранный режим." />
+              <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
+                         Text="•  Быстрый путь для игр Windows. На Mac с Apple Silicon Direct3D идёт напрямую в Metal, а кэш шейдеров сохраняется между запусками — игра меньше подтормаживает." />
+              <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
+                         Text="•  Игра на первом месте. macOS отдаёт ей ресурсы раньше других программ, а лаунчер перестаёт рисовать в фоне." />
+              <TextBlock Classes="dim" FontSize="12" TextWrapping="Wrap"
+                         Text="Если игре не хватает процессора, кадров прибавится мало. ULTRA не меняет файлы игры; оконная игра и игры на других движках остаются в своём разрешении." />
+              <Grid ColumnDefinitions="Auto,*" IsEnabled="{Binding IsPrime}">
+                <TextBlock Classes="dim" Text="Разрешение рендера" VerticalAlignment="Center" Margin="0,0,16,0" />
+                <ComboBox Grid.Column="1" Name="UltraRenderBox" ItemsSource="{Binding UltraRenderChoices}" SelectedIndex="{Binding UltraRenderIndex, Mode=TwoWay}"
+                          MaxWidth="380" HorizontalAlignment="Left" AutomationProperties.Name="Разрешение рендера ULTRA" />
+              </Grid>
+            </StackPanel>
+          </Border>
           <Border Name="LibrarySettingsCard" Classes="card">
             <StackPanel Spacing="10">
               <TextBlock FontSize="16" FontWeight="SemiBold" Text="Библиотека Mac" />

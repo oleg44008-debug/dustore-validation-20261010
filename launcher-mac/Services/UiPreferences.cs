@@ -24,6 +24,8 @@ public sealed class UiPreferences
     public bool ReduceMotion { get; set; }
     /// <summary>Both editions: Halloween in October, New Year from December to the end of January.</summary>
     public bool SeasonalThemes { get; set; } = true;
+    /// <summary>Prime: the share of the display, per side, a Unity game renders at under ULTRA when full screen.</summary>
+    public int UltraRenderScale { get; set; } = UltraMode.DefaultRenderScale;
 
     private static readonly JsonSerializerOptions Json = new() { WriteIndented = true };
 
@@ -106,6 +108,7 @@ public sealed class UiPreferences
     /// <summary>Applies theme and accent to the application's dynamic brushes. Free always shows Graphite.</summary>
     public void Apply()
     {
+        UltraMode.RenderScale = UltraMode.NormalizeScale(UltraRenderScale);
         if (Application.Current is not { } app) return;
         var theme = Edition.IsPrime ? Themes.FirstOrDefault(t => t.Key == Theme) ?? Themes[0] : Themes[0];
         var accent = Edition.IsPrime ? Accents.FirstOrDefault(a => a.Key == Accent) ?? Accents[0] : Accents[0];
