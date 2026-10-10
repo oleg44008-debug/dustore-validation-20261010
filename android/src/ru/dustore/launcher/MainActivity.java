@@ -584,8 +584,9 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
         bar.addView(reload);
 
         TextView brand = Ui.title(this, "DUSTORE", 14, Ui.TEXT);
+        Ui.chromeText(brand, 14);
         brand.setSingleLine(true);
-        brand.setMaxWidth(Ui.dp(this, 72));
+        brand.setMaxWidth(Math.round(Ui.dp(this, 72) * Ui.chromeScale(this)));
         brand.setEllipsize(android.text.TextUtils.TruncateAt.END);
         brand.setPadding(Ui.dp(this, 8), 0, 0, 0);
         bar.addView(brand);
@@ -596,6 +597,7 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView mode = Ui.text(this, siteModeLabel(), 12, Ui.MUTED);
+        Ui.chromeText(mode, 12);
         siteModeLabelView = mode;
         mode.setBackground(Ui.glass(this, Ui.R_BUTTON, false));
         mode.setPadding(Ui.dp(this, 12), Ui.dp(this, 6), Ui.dp(this, 12), Ui.dp(this, 6));
@@ -1243,6 +1245,7 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
             final int index = i;
 
             TextView tab = Ui.text(this, names[i], Ui.T_LABEL, Ui.MUTED);
+            Ui.chromeText(tab, Ui.T_LABEL);
             tab.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
             tab.setCompoundDrawablesWithIntrinsicBounds(null,
                     Ui.icon(this, icons[i], 22, i == 0 ? Ui.ACCENT : Ui.MUTED), null, null);

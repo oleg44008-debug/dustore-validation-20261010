@@ -151,6 +151,11 @@
    "sha256": "6744901e1027a09ce68564a46563078b29ae1c0faa1f74fb7650d5fb590b5e30"
   },
   {
+   "path": "src/ru/dustore/launcher/ChromeFont.java",
+   "bytes": 352,
+   "sha256": "3ec4091fe39a3176ca21d8e593e225d60d31bbfd91f3b608c77edfd7f1d96b42"
+  },
+  {
    "path": "src/ru/dustore/launcher/DustoreApp.java",
    "bytes": 412,
    "sha256": "c5596e63a312b2918219e3ec36ba053869932c4bf58f1f97159baf0f3811676b"
@@ -367,8 +372,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/MainActivity.java",
-   "bytes": 98974,
-   "sha256": "f2ed98a4ca56745f18184ca577d41db06dc6b80e0aaf8aebcd80a160b6a5b20f"
+   "bytes": 99120,
+   "sha256": "8b78687e661e0245972659ea48b46667b87269b238d8c4eda7e19c4dc25e88f9"
   },
   {
    "path": "src/ru/dustore/launcher/Motion.java",
@@ -417,8 +422,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/Prime.java",
-   "bytes": 13816,
-   "sha256": "fabf14e2ab59b49bcc976566c0766024eb7fab4e37495b2194a6aca5ebcc70f9"
+   "bytes": 13915,
+   "sha256": "ed819740503fe85b781edc9d69ecd93d88f1b609a01c705df2410d1557a34609"
   },
   {
    "path": "src/ru/dustore/launcher/PrimeAppearance.java",
@@ -452,8 +457,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/Ui.java",
-   "bytes": 47438,
-   "sha256": "7d5932b41873b560130ee24c98cadd393fe9cd04718c9e98508735be9e229983"
+   "bytes": 48312,
+   "sha256": "d77639415645d9aab1cb1788cabe735f8075716bee2762f5aa24ac2fb00dcc4d"
   },
   {
    "path": "src/ru/dustore/launcher/UiWork.java",
@@ -487,8 +492,8 @@
   },
   {
    "path": "tests/BehaviorTests.java",
-   "bytes": 6315,
-   "sha256": "e4100b7d166285aa8ac588de65986a0905215498bd7bbc74fe55c53b08a86906"
+   "bytes": 6781,
+   "sha256": "d5b1138723b0767d38ca81d609456ec731c49f57e9ef1ab74cb4d308b37f9c3f"
   },
   {
    "path": "tests/ExTests.java",

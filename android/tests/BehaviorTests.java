@@ -35,6 +35,11 @@ public final class BehaviorTests {
         check("a lookalike prefix is not an alias", GameFolders.unalias("/sdcard2/x", storage).equals("/sdcard2/x"));
         check("an ordinary path is left alone", GameFolders.unalias("/data/local/tmp/x", storage).equals("/data/local/tmp/x"));
 
+        // The bars follow the system font size up to 130%; content keeps scaling in full.
+        check("bars follow a normal font size", ChromeFont.scale(1.0f) == 1.0f && ChromeFont.scale(1.15f) == 1.15f);
+        check("bars stop growing at the limit", ChromeFont.scale(2.0f) == ChromeFont.LIMIT && ChromeFont.scale(1.3f) == 1.3f);
+        check("a nonsense font scale is treated as normal", ChromeFont.scale(0f) == 1.0f && ChromeFont.scale(Float.NaN) == 1.0f);
+
         Object first = new Object(), second = new Object();
         check("first session owns compositor", ExSession.acquire(first));
         check("nested probe can use the same owner", ExSession.acquire(first));

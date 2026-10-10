@@ -213,6 +213,7 @@ final class Prime {
     /** Both editions expose motion settings; Prime also exposes themes and ULTRA. */
     static TextView mark(final Activity activity) {
         TextView chip = Ui.chip(activity, ON ? "PRIME" : "FREE", ON ? Ui.ACCENT : Ui.DIM);
+        Ui.chromeText(chip, Ui.T_MICRO);
         chip.setSingleLine(true);
         chip.setMinHeight(Ui.dp(activity, Ui.TOUCH));
         chip.setGravity(android.view.Gravity.CENTER);

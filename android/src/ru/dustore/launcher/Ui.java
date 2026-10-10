@@ -399,6 +399,22 @@ final class Ui {
     }
 
     /** Заголовок: тот же текст, но набранный так, что его видно первым. */
+    /**
+     * Text size for the bars around the content: tab labels, the top bar, mode chips.
+     *
+     * They follow the system font size up to 130% and stop there, as system navigation bars
+     * do. Unlimited, a 200% setting turned «Библиотека» into «Библиот…» and the brand into
+     * «DU…» inside tabs whose width cannot grow; the content itself keeps scaling in full.
+     */
+    static void chromeText(TextView view, float sp) {
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp * chromeScale(view.getContext())
+                * view.getResources().getDisplayMetrics().density);
+    }
+
+    static float chromeScale(Context context) {
+        return ChromeFont.scale(context.getResources().getConfiguration().fontScale);
+    }
+
     static TextView title(Context context, String value, int size, int color) {
         TextView view = text(context, value, size, color);
         view.setTypeface(Typeface.DEFAULT_BOLD);
