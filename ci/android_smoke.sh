@@ -73,8 +73,21 @@ adb shell settings put system accelerometer_rotation 0
 adb shell settings put system user_rotation 1
 sleep 5
 shot 04-landscape
+# On its side the bars go compact: every tab must still be reachable, and the upright
+# layout must come back afterwards.
+ltab() {
+  local size w h
+  size=$(adb shell wm size | tail -1 | grep -oE '[0-9]+x[0-9]+')
+  h=${size%x*}; w=${size#*x}
+  adb shell input tap $(( w * (2 * $1 - 1) / 6 )) $(( h - h * 120 / 1000 ))
+  sleep 4
+}
+ltab 2; shot 04-landscape-library
+ltab 3; shot 04-landscape-computer
+ltab 1; shot 04-landscape-store
 adb shell settings put system user_rotation 0
 sleep 4
+shot 04-upright-again
 alive || { note "process gone after rotation"; failures=$((failures + 1)); }
 
 # Random interaction inside the app only: the task is pinned so monkey cannot wander off

@@ -102,6 +102,7 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
     private LibraryScreen libraryScreen;
     private PcScreen pcScreen;
     private int shownScreen;
+    private boolean compactBars;
     private PremiumNav navigationBar;
 
     private Library library;
@@ -1224,15 +1225,8 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
         navigationBar = bar;
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setBackground(Ui.bar(this, true));
-        bar.setPadding(Ui.dp(this, Ui.S2), Ui.dp(this, Ui.S2),
-                Ui.dp(this, Ui.S2), Ui.dp(this, Ui.S2));
         bar.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        // Полоса — последнее, что стоит над системной навигацией телефона, поэтому нижнюю
-        // системную врезку берёт именно она. Экраны выше её намеренно не берут, иначе
-        // отступ вышел бы двойным.
-        Ui.fit(bar, false, true, true);
 
         // «С компьютера» в две строки ломало высоту полосы и заставляло соседние подписи
         // прыгать. Слово короче — строка одна, и вкладка перестаёт быть выше остальных.
@@ -1247,22 +1241,16 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
             TextView tab = Ui.text(this, names[i], Ui.T_LABEL, Ui.MUTED);
             Ui.chromeText(tab, Ui.T_LABEL);
             tab.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-            tab.setCompoundDrawablesWithIntrinsicBounds(null,
-                    Ui.icon(this, icons[i], 22, i == 0 ? Ui.ACCENT : Ui.MUTED), null, null);
             tab.setCompoundDrawablePadding(Ui.dp(this, 3));
             tab.setTag(icons[i]);
+            tab.setContentDescription(names[i]);
             tab.setSelected(i == 0);
-            styleTab(tab, i == 0);
             tab.setGravity(Gravity.CENTER);
             tab.setMaxLines(1);
             tab.setEllipsize(android.text.TextUtils.TruncateAt.END);
-            tab.setMinHeight(Ui.dp(this, 58));
-            tab.setPadding(Ui.dp(this, Ui.S1), Ui.dp(this, 6),
-                    Ui.dp(this, Ui.S1), Ui.dp(this, 6));
             tab.setClickable(true);
             tab.setForeground(Ui.tap(this, 20));
             tab.setFocusable(true);
-            tab.setContentDescription(names[i]);
             Ui.touchMotion(tab);
 
             tab.setOnClickListener(v -> {
@@ -1277,15 +1265,91 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
             bar.addView(tab, item);
         }
 
+        applyBarDensity();
         return bar;
+    }
+
+    /**
+     * Высота нижней полосы под экран. У телефона на боку высоты мало: полоса со значком
+     * над подписью вместе с верхней забирала больше половины экрана, и магазину оставалась
+     * щель. Там значок встаёт рядом с подписью, а отступы сжимаются; касаться по-прежнему
+     * есть где — 48 dp.
+     */
+    private void applyBarDensity() {
+        compactBars = ChromeFont.shortScreen(getResources().getConfiguration().screenHeightDp);
+        if (navigationBar == null || navTabs == null) return;
+
+        int edge = Ui.dp(this, compactBars ? Ui.S1 : Ui.S2);
+        navigationBar.setPadding(edge, edge, edge, edge);
+        // Полоса — последнее, что стоит над системной навигацией телефона, поэтому нижнюю
+        // системную врезку берёт именно она. Экраны выше её намеренно не берут, иначе
+        // отступ вышел бы двойным. Врезка прибавляется к отступам, заданным строкой выше.
+        Ui.fit(navigationBar, false, true, true);
+
+        int vertical = Ui.dp(this, compactBars ? 2 : 6);
+        for (int i = 0; i < navTabs.length; i++) {
+            TextView tab = navTabs[i];
+            if (tab == null) continue;
+            tab.setMinHeight(Ui.dp(this, compactBars ? 48 : 58));
+            tab.setPadding(Ui.dp(this, Ui.S1), vertical, Ui.dp(this, Ui.S1), vertical);
+            styleTab(tab, i == shownScreen);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(android.content.res.Configuration config) {
+        super.onConfigurationChanged(config);
+        applyBarDensity();
+    }
+
+    /** Значок в строке подписи, по её середине: так пара «значок + слово» центрируется целиком. */
+    private static final class InlineIcon extends android.text.style.ReplacementSpan {
+        private final android.graphics.drawable.Drawable icon;
+        private final int gap;
+
+        InlineIcon(android.graphics.drawable.Drawable icon, int gap) {
+            this.icon = icon;
+            this.gap = gap;
+            icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        }
+
+        @Override
+        public int getSize(android.graphics.Paint paint, CharSequence text, int start, int end,
+                           android.graphics.Paint.FontMetricsInt metrics) {
+            return icon.getIntrinsicWidth() + gap;
+        }
+
+        @Override
+        public void draw(android.graphics.Canvas canvas, CharSequence text, int start, int end,
+                         float x, int top, int baseline, int bottom, android.graphics.Paint paint) {
+            android.graphics.Paint.FontMetricsInt metrics = paint.getFontMetricsInt();
+            float middle = baseline + (metrics.ascent + metrics.descent) / 2f;
+            canvas.save();
+            canvas.translate(x, middle - icon.getIntrinsicHeight() / 2f);
+            icon.draw(canvas);
+            canvas.restore();
+        }
     }
 
     private void styleTab(TextView tab, boolean active) {
         tab.setTextColor(active ? Ui.ACCENT : Ui.MUTED);
         // The vector icon draws in a fixed colour, so the selected one is drawn anew.
         Object name = tab.getTag();
-        if (name instanceof String)
-            tab.setCompoundDrawablesWithIntrinsicBounds(null, Ui.icon(this, (String) name, 22, active ? Ui.ACCENT : Ui.MUTED), null, null);
+        CharSequence label = tab.getContentDescription();
+        if (name instanceof String && label != null) {
+            android.graphics.drawable.Drawable icon =
+                    Ui.icon(this, (String) name, compactBars ? 20 : 22, active ? Ui.ACCENT : Ui.MUTED);
+            if (compactBars) {
+                android.text.SpannableString line = new android.text.SpannableString("\u00A0" + label);
+                line.setSpan(new InlineIcon(icon, Ui.dp(this, Ui.S2)), 0, 1,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tab.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                tab.setText(line);
+            } else {
+                tab.setCompoundDrawablesWithIntrinsicBounds(null, icon, null, null);
+                tab.setText(label);
+            }
+        }
         tab.setTypeface(active ? android.graphics.Typeface.DEFAULT_BOLD : android.graphics.Typeface.DEFAULT);
         tab.setBackground(null);
     }

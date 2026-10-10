@@ -40,6 +40,11 @@ public final class BehaviorTests {
         check("bars stop growing at the limit", ChromeFont.scale(2.0f) == ChromeFont.LIMIT && ChromeFont.scale(1.3f) == 1.3f);
         check("a nonsense font scale is treated as normal", ChromeFont.scale(0f) == 1.0f && ChromeFont.scale(Float.NaN) == 1.0f);
 
+        // A phone on its side gets compact bars; an upright phone and a tablet do not.
+        check("a phone on its side is a short screen", ChromeFont.shortScreen(360) && ChromeFont.shortScreen(411));
+        check("an upright phone and a tablet are not", !ChromeFont.shortScreen(800) && !ChromeFont.shortScreen(600) && !ChromeFont.shortScreen(480));
+        check("an unknown height keeps the ordinary bars", !ChromeFont.shortScreen(0));
+
         Object first = new Object(), second = new Object();
         check("first session owns compositor", ExSession.acquire(first));
         check("nested probe can use the same owner", ExSession.acquire(first));
