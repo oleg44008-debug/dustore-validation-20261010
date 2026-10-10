@@ -70,6 +70,8 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public MainViewModel(LauncherServices services)
     {
         _services = services;
+        _commandErrors = error => { if (!_disposed) ReportError(error); };
+        AsyncCommand.ErrorSink = _commandErrors;
         Targets = new[] { new TargetChoice("macOS", TargetPlatform.MacOS), new TargetChoice("Windows", TargetPlatform.Windows) };
         Architectures = new[] { new ArchitectureChoice("Apple Silicon · ARM64", "arm64"), new ArchitectureChoice("Intel · x64", "x64") };
         _target = Targets[0];
@@ -921,6 +923,8 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public void CancelOperation() => _operation?.Cancel();
     public void DismissError() => Error = "";
 
+    private readonly Action<Exception> _commandErrors;
+
     public void ReportError(Exception error)
     {
         Error = error.Message;
@@ -1230,6 +1234,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public void Dispose()
     {
         if (_disposed) return; _disposed = true;
+        if (ReferenceEquals(AsyncCommand.ErrorSink, _commandErrors)) AsyncCommand.ErrorSink = null;
         GameSessions.Changed -= OnGameSessionChanged;
         NativeAppSessions.Changed -= OnGameSessionChanged;
         _coverLoad?.Cancel(); _coverLoad?.Dispose(); _coverLoad = null;
@@ -1413,7 +1418,12 @@ internal sealed class AsyncCommand : ICommand, ICommandNotifications
         if (!CanExecute(parameter)) return;
         _running = true; RaiseCanExecuteChanged();
         try { await _execute(); }
+        // An async void handler has no caller to throw to: left alone, the exception reaches
+        // the dispatcher and ends the app. The owner shows it as an ordinary failed action.
+        catch (Exception error) { if (ErrorSink is { } sink) sink(error); else throw; }
         finally { _running = false; RaiseCanExecuteChanged(); }
     }
+    /// <summary>Where a command's own failure goes; set by the window's view model.</summary>
+    public static Action<Exception>? ErrorSink { get; set; }
     public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 }

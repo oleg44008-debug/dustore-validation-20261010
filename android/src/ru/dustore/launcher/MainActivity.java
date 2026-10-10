@@ -444,6 +444,14 @@ public class MainActivity extends Activity implements LibraryScreen.Host {
             final String folder = intent.getStringExtra("folder");
             Library.Entry entry = null;
 
+            // Этот запрос приходит снаружи (с компьютера по кабелю), и прислать его может
+            // любое приложение: к собственным закрытым файлам он не допускается.
+            if ((zip != null && GameFolders.isPrivate(this, new File(zip)))
+                    || (zip == null && folder != null && GameFolders.isPrivate(this, new File(folder)))) {
+                Ex.log(this, "ОШИБКА: путь указывает на закрытые файлы приложения");
+                return;
+            }
+
             if (zip != null) {
                 // Архив как из магазина: запись в библиотеке, вид «сборка для Windows».
                 File file = new File(zip);

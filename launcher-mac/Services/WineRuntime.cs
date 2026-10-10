@@ -128,8 +128,8 @@ public static class WineRuntime
             }
             finally
             {
-                try { File.Delete(archive); } catch (IOException) { }
-                try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (IOException) { }
+                try { File.Delete(archive); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
+                try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
             }
         }
     }
@@ -178,8 +178,8 @@ public static class WineRuntime
         }
         finally
         {
-            try { File.Delete(archive); } catch (IOException) { }
-            try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (IOException) { }
+            try { File.Delete(archive); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
+            try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
         }
     }
 
@@ -279,7 +279,7 @@ public static class WineRuntime
                 }
         }
         catch (OperationCanceledException) { }
-        catch (IOException) { }
+        catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
         catch (ObjectDisposedException) { }
     }
 
@@ -294,6 +294,6 @@ public static class WineRuntime
         if (app is null) return false;
         string plist = Path.Combine(app, "Contents", "Info.plist");
         try { return File.Exists(plist) && File.ReadAllText(plist).Contains("local.dustorex.wine.", StringComparison.Ordinal); }
-        catch (IOException) { return false; }
+        catch (Exception unreadable) when (unreadable is IOException or UnauthorizedAccessException) { return false; }
     }
 }

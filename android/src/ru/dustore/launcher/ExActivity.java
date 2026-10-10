@@ -148,6 +148,16 @@ public final class ExActivity extends Activity {
         String path = getIntent().getStringExtra(EXTRA_FOLDER);
         String id = getIntent().getStringExtra(EXTRA_GAME);
 
+        // The window is exported: the computer opens it over the cable and a game's own icon
+        // opens it by id. A folder named from outside must be one of the launcher's game
+        // folders — anything else would run a stranger's build with this app's files and rights.
+        if (path != null) {
+            File asked = new File(path), external = getExternalFilesDir(null);
+            boolean owned = GameFolders.contains(Ex.localGames(this), asked)
+                    || external != null && GameFolders.contains(new File(external, "games"), asked);
+            if (!owned) path = null;
+        }
+
         if (path == null && id != null) {
             File byId = ExGame.folderOf(this, id);
             path = byId == null ? null : byId.getAbsolutePath();

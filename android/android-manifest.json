@@ -162,8 +162,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/ExActivity.java",
-   "bytes": 54755,
-   "sha256": "93a83b5398e8757a724aba981633eed5ce27f06897e13372f7fa0b96cbed9370"
+   "bytes": 55668,
+   "sha256": "3e7f1442c5f50f9c1e511c657006f282c9074321f9a8378e5ea10ee510180450"
   },
   {
    "path": "src/ru/dustore/launcher/ExApk.java",
@@ -317,8 +317,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/GameFolders.java",
-   "bytes": 507,
-   "sha256": "a7fef428569909b06253865824dc5f02ec672b3bd8a6ec991547ad65f0acbce0"
+   "bytes": 2601,
+   "sha256": "1ebd352c75239f44d4f8eab4555a747196fbc3c321f0ed24d1b3b005b95a4c69"
   },
   {
    "path": "src/ru/dustore/launcher/GameKey.java",
@@ -337,8 +337,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/JoypadActivity.java",
-   "bytes": 51908,
-   "sha256": "32814adbb34316ba0c516882771723e8c432989424b3f65da53ac48b0e69e7b4"
+   "bytes": 51993,
+   "sha256": "b9a0249070a6d36f3ffea9a89b45ffb6665395bce1d750f90645fffdeab1b99f"
   },
   {
    "path": "src/ru/dustore/launcher/KeyPad.java",
@@ -367,8 +367,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/MainActivity.java",
-   "bytes": 98333,
-   "sha256": "b4a3feeb732296b47d715291ed15e99bf5ecc8e620ded2743909e63fd53fd8a2"
+   "bytes": 98974,
+   "sha256": "f2ed98a4ca56745f18184ca577d41db06dc6b80e0aaf8aebcd80a160b6a5b20f"
   },
   {
    "path": "src/ru/dustore/launcher/Motion.java",
@@ -391,6 +391,11 @@
    "sha256": "376618cbef171a5288fdc56bcaf5bacdd470e404701aeb7fc96823654bfc9194"
   },
   {
+   "path": "src/ru/dustore/launcher/PadIdentity.java",
+   "bytes": 1630,
+   "sha256": "9ab82626f85b0848f9f759aa01b087da4d52617abd140da5df92ab1f1107a38f"
+  },
+  {
    "path": "src/ru/dustore/launcher/PadPanel.java",
    "bytes": 20161,
    "sha256": "d57a6160f07ea45ab5ddd872db6133dc121f8a7338b2f668daa06df5f1ef21ad"
@@ -402,8 +407,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/PcScreen.java",
-   "bytes": 43546,
-   "sha256": "eae4839d7bddfab501314736052046d94b25d94e08c47b0008a40e665812b3a8"
+   "bytes": 43763,
+   "sha256": "7ee614bc4ce5ec1721ef36ee0a08005feab01b1ae65328e401c05b6e03d7fdf2"
   },
   {
    "path": "src/ru/dustore/launcher/PremiumNav.java",
@@ -482,8 +487,8 @@
   },
   {
    "path": "tests/BehaviorTests.java",
-   "bytes": 5594,
-   "sha256": "e347c3416321bdc7c9d68eb3a1926fe1e66bf3f3589ed6f1f9d284c610226f36"
+   "bytes": 6315,
+   "sha256": "e4100b7d166285aa8ac588de65986a0905215498bd7bbc74fe55c53b08a86906"
   },
   {
    "path": "tests/ExTests.java",

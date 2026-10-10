@@ -4,13 +4,13 @@
   "freezes": {
     "ios": {
       "owner": "foundation",
-      "milestone": "Claude 2026-10-10 bugfix+polish pass",
-      "snapshottedAtUtc": "2026-10-09T22:58:49.878870+00:00"
+      "milestone": "Claude 2026-10-11 unchanged since 10-10",
+      "snapshottedAtUtc": "2026-10-10T07:23:03.917884+00:00"
     },
     "mac": {
       "owner": "mac_design",
-      "milestone": "Claude 2026-10-10 bugfix+polish pass",
-      "snapshottedAtUtc": "2026-10-09T22:58:49.878886+00:00"
+      "milestone": "Claude 2026-10-11 command-failure handling",
+      "snapshottedAtUtc": "2026-10-10T07:23:03.917862+00:00"
     }
   },
   "sourceScope": "Only the supplied isolated Prime/Source snapshot; both editions are built with explicit configurations.",
@@ -373,8 +373,8 @@
       "path": "launcher-mac/Services/CoverExtractor.cs",
       "source": "DustoreLauncherV-Mac/Services/CoverExtractor.cs",
       "platform": "mac",
-      "bytes": 3974,
-      "sha256": "37231e182a0f0f29cfc8dfd49b71130a8e6c169af673f986ec8d9aced2fc4f62"
+      "bytes": 4041,
+      "sha256": "d08d7dbd073112d111a94ce604e895a2c4fac8d9f3f8ebce5aeb852805f3b863"
     },
     {
       "path": "launcher-mac/Services/Edition.cs",
@@ -429,8 +429,8 @@
       "path": "launcher-mac/Services/LauncherSmokeChecks.cs",
       "source": "DustoreLauncherV-Mac/Services/LauncherSmokeChecks.cs",
       "platform": "mac",
-      "bytes": 34131,
-      "sha256": "b3c970c60b89de49ebde5d8ddb976c47a8fe2c44662803fea314fb3d007523c8"
+      "bytes": 35202,
+      "sha256": "3b933ce0e822924038958b14dcbfe3aac8ab666c9b7fd331b95628822e8c5c20"
     },
     {
       "path": "launcher-mac/Services/MacAccessibility.cs",
@@ -478,8 +478,8 @@
       "path": "launcher-mac/Services/PrimeGraphics.cs",
       "source": "DustoreLauncherV-Mac/Services/PrimeGraphics.cs",
       "platform": "mac",
-      "bytes": 13677,
-      "sha256": "2e3113e4139b7b353a425e40aee25553d6f97ae18aa7288988cc7138ef1191fa"
+      "bytes": 13825,
+      "sha256": "893f28068287f5808fffc4022ddb7b959961ed950614e55e833a684ea757c2d9"
     },
     {
       "path": "launcher-mac/Services/SessionChecks.cs",
@@ -534,8 +534,8 @@
       "path": "launcher-mac/Services/WineRuntime.cs",
       "source": "DustoreLauncherV-Mac/Services/WineRuntime.cs",
       "platform": "mac",
-      "bytes": 18394,
-      "sha256": "e5a21d842590f143372cfd95de7961373366a490d8ff7736f683bd499256910e"
+      "bytes": 18802,
+      "sha256": "221891d0ceb3a8571f93dc6e74a106d7ad210ef297342bf97177e0dd8e1bd72c"
     },
     {
       "path": "launcher-mac/Services/WineSmoke.cs",
@@ -555,8 +555,8 @@
       "path": "launcher-mac/ViewModels/MainViewModel.cs",
       "source": "DustoreLauncherV-Mac/ViewModels/MainViewModel.cs",
       "platform": "mac",
-      "bytes": 88968,
-      "sha256": "410caf9982b158c268ebd37c6c40c3bc6c66c98e5edefe571ec01a86da7003e4"
+      "bytes": 90403,
+      "sha256": "7958741a6ce7526f8f67ba516b23fe96e758240cb6b424985760e95a3402e135"
     },
     {
       "path": "launcher-mac/packaging/DustoreLauncherV.icns",

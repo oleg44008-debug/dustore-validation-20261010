@@ -28,6 +28,13 @@ public final class BehaviorTests {
         check("lifecycle reset is idempotent", events.size() == count);
         ledger.set("released", "D", false); check("late pointer up is harmless", events.size() == count);
 
+        // The computer names game folders through /sdcard; the app compares them as /storage/emulated/0.
+        String storage = "/storage/emulated/0", games = "/Android/data/ru.dustore.launcher/files/games/demo";
+        check("cable path alias is rewritten", GameFolders.unalias("/sdcard" + games, storage).equals(storage + games));
+        check("self-primary alias is rewritten", GameFolders.unalias("/storage/self/primary" + games, storage).equals(storage + games));
+        check("a lookalike prefix is not an alias", GameFolders.unalias("/sdcard2/x", storage).equals("/sdcard2/x"));
+        check("an ordinary path is left alone", GameFolders.unalias("/data/local/tmp/x", storage).equals("/data/local/tmp/x"));
+
         Object first = new Object(), second = new Object();
         check("first session owns compositor", ExSession.acquire(first));
         check("nested probe can use the same owner", ExSession.acquire(first));

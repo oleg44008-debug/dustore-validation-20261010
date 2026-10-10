@@ -30,6 +30,18 @@ public static class LauncherSmokeChecks
             string emptyProfile = Path.Combine(fixtures, "empty-startup-profile");
             var emptyService = new LauncherServices(emptyProfile, fakePlatform);
             VerifyWindowArguments(Check);
+            {
+                // A command's own failure is shown, not thrown into the dispatcher (which ended the app).
+                var previousSink = ViewModels.AsyncCommand.ErrorSink;
+                Exception? reported = null;
+                ViewModels.AsyncCommand.ErrorSink = error => reported = error;
+                var failing = new ViewModels.AsyncCommand(() => Task.FromException(new UnauthorizedAccessException("owned fixture")));
+                failing.Execute(null);
+                ViewModels.AsyncCommand.ErrorSink = previousSink;
+                Check(reported is UnauthorizedAccessException && failing.CanExecute(null),
+                    "a failing interface command is reported and stays usable instead of ending the app");
+                Check(!WineRuntime.IsWineWrapper(Path.Combine(fixtures, "missing.app")), "a missing app bundle is simply not a Wine wrapper");
+            }
             await VerifyCaptureConfigurationAsync(fixtures, cancellation, Check).ConfigureAwait(false);
             Check(GameLaunchOptions.WineGodotRenderer.Contains("opengl3") && GameLaunchOptions.WineGodotRenderer.Contains("gl_compatibility"),
                 "Godot under Wine starts on the OpenGL Compatibility renderer instead of Vulkan");

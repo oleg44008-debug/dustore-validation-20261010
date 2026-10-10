@@ -31,7 +31,7 @@ internal static class CoverExtractor
             File.Move(temporary, cover, overwrite: true);
             return cover;
         }
-        finally { try { File.Delete(temporary); } catch (IOException) { } }
+        finally { try { File.Delete(temporary); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { } }
     }
 
     private static async Task<string?> FindIconAsync(string app, CancellationToken cancellation)

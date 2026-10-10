@@ -91,8 +91,8 @@ public static class PrimeGraphics
             }
             finally
             {
-                foreach (string file in new[] { wineArchive, dxmtArchive }) try { File.Delete(file); } catch (IOException) { }
-                try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (IOException) { }
+                foreach (string file in new[] { wineArchive, dxmtArchive }) try { File.Delete(file); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
+                try { if (Directory.Exists(staging)) Directory.Delete(staging, true); } catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException) { }
             }
         }
         finally { Gate.Release(); }

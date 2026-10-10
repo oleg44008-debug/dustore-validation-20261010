@@ -577,6 +577,7 @@ final class PcScreen extends ScrollView {
 
                 JSONObject hello = new JSONObject();
                 hello.put("code", context.getSharedPreferences("exepad", Context.MODE_PRIVATE).getString("code", ""));
+                hello.put("device", PadIdentity.of(context));
                 Wire.writeText(outgoing, Wire.MSG_HELLO, hello.toString());
                 Wire.write(outgoing, Wire.MSG_LIST, null);
 
