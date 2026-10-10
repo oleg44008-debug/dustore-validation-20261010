@@ -17,6 +17,8 @@
     <Border Name="Sidebar" Background="{DynamicResource NavBackground}" BorderBrush="{DynamicResource Hairline}" BorderThickness="0,0,1,0"
             PointerPressed="DragArea_PointerPressed">
       <Grid RowDefinitions="*,Auto" Margin="14,0,14,16">
+        <!-- Seasonal: a cobweb or a string of lights behind the brand; nothing outside a season. -->
+        <c:SeasonOrnament Rail="True" Grid.RowSpan="2" Margin="-14,0,-14,-16" />
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <StackPanel Spacing="2">
           <!-- Room for the macOS window buttons over the extended client area. -->
@@ -108,6 +110,8 @@
 
     <!-- ===== Main column ===== -->
     <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Name="MainColumn" Background="{DynamicResource Background}">
+      <!-- Seasonal: a moon with bats or still snow behind the pages; nothing outside a season. -->
+      <c:SeasonOrnament Grid.RowSpan="3" />
 
       <!-- Large title, like macOS apps; the bar also drags the window. -->
       <Border Background="Transparent" Padding="{Binding HeaderPadding}" PointerPressed="DragArea_PointerPressed">
@@ -567,6 +571,8 @@
                 <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IntroAnimation, Mode=TwoWay}" Margin="0,0,0,6" AutomationProperties.Name="Анимация при запуске"><TextBlock Text="Анимация при запуске" TextWrapping="Wrap" FontSize="13" /></CheckBox>
               </Grid>
               <TextBlock Name="MotionPreferenceHint" Text="{Binding MotionPreferenceNote}" Classes="dim" FontSize="12" TextWrapping="Wrap" /><CheckBox Name="MotionToggle" Content="Уменьшить движение" IsChecked="{Binding ReduceMotion, Mode=TwoWay}" ToolTip.Tip="Отключает вступление, движение карточек и переходы разделов." />
+              <CheckBox Name="SeasonToggle" IsChecked="{Binding SeasonalThemes, Mode=TwoWay}" AutomationProperties.Name="Сезонное оформление" ToolTip.Tip="Оформление меняется на праздники и само возвращается обратно."><TextBlock Text="Сезонное оформление" TextWrapping="Wrap" FontSize="13" /></CheckBox>
+              <TextBlock Name="SeasonHint" Text="{Binding SeasonNote}" Classes="dim" FontSize="12" TextWrapping="Wrap" />
             </StackPanel>
           </Border>
           <Border Classes="card"><StackPanel Spacing="12"><TextBlock Text="Управление" FontSize="16" FontWeight="SemiBold" /><Button Classes="pill" Content="Полноэкранный режим" Click="Fullscreen_Click" HorizontalAlignment="Left" ToolTip.Tip="⌃⌘F / F11" AutomationProperties.Name="Полноэкранный режим" /><TextBlock Text="⌘F — поиск · ⌘O — добавить игру&#10;⌘1 / ⌘2 / ⌘3 — разделы · ⌘, — настройки&#10;Стрелки — выбрать игру · Enter — играть" Classes="dim" FontSize="12" TextWrapping="Wrap" LineHeight="21" /></StackPanel></Border>

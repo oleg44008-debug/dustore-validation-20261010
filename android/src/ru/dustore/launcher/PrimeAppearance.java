@@ -19,6 +19,7 @@ final class PrimeAppearance {
     private final Dialog dialog;
     private int theme = Prime.themeIndex();
     private int accent = Prime.accentIndex();
+    private boolean seasonal;
     private final TextView preview;
     private final LinearLayout themeCards;
     private final LinearLayout accentCards;
@@ -28,6 +29,7 @@ final class PrimeAppearance {
 
     private PrimeAppearance(Activity activity) {
         this.activity = activity;
+        seasonal = Season.enabled(activity);
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -104,6 +106,19 @@ final class PrimeAppearance {
             content.addView(Ui.paragraph(activity, "Темы и акцентные цвета доступны в версии Prime.", Ui.T_LABEL, Ui.DIM_FIXED));
         }
         content.addView(Ui.gap(activity, 20));
+        content.addView(label("СЕЗОНЫ"));
+        content.addView(Ui.gap(activity, 8));
+        TextView season = row("Сезонное оформление", seasonal);
+        season.setOnClickListener(v -> {
+            seasonal = !seasonal;
+            season.setText(toggle("Сезонное оформление", seasonal));
+            update();
+        });
+        content.addView(season);
+        content.addView(Ui.gap(activity, 8));
+        content.addView(Ui.paragraph(activity, "Хеллоуин — весь октябрь, Новый год — с 1 декабря по 31 января; потом возвращается обычный вид. "
+                + Season.describe(Season.current()), Ui.T_MICRO, Ui.DIM_FIXED));
+        content.addView(Ui.gap(activity, 20));
         content.addView(label("ДВИЖЕНИЕ"));
         LinearLayout motion = Ui.row(activity);
         for (int i = 0; i < Motion.NAMES.length; i++) {
@@ -163,11 +178,13 @@ final class PrimeAppearance {
         root.addView(Ui.gap(activity, 12));
         apply = Ui.button(activity, "Готово", true);
         apply.setOnClickListener(v -> {
-            if (Prime.ON && (theme != Prime.themeIndex() || accent != Prime.accentIndex())) {
-                Prime.saveAppearance(activity, theme, accent);
-                dialog.dismiss();
-                Prime.restart(activity);
-            } else dialog.dismiss();
+            boolean look = Prime.ON && (theme != Prime.themeIndex() || accent != Prime.accentIndex());
+            boolean switched = seasonal != Season.enabled(activity);
+            if (look) Prime.saveAppearance(activity, theme, accent);
+            if (switched) Season.setEnabled(activity, seasonal);
+            dialog.dismiss();
+            // Палитра читается один раз при запуске, поэтому новый вид появляется после перезапуска.
+            if (look || switched) Prime.restart(activity);
         });
         root.addView(apply, new LinearLayout.LayoutParams(-1, -2));
         dialog.setContentView(root);
@@ -232,7 +249,7 @@ final class PrimeAppearance {
         preview.setBackground(material(Prime.themePreview(theme), selectedAccent, 20));
         updateChoices(themeCards, theme, selectedAccent);
         updateChoices(accentCards, accent, selectedAccent);
-        if (apply != null) apply.setText(theme == Prime.themeIndex() && accent == Prime.accentIndex()
+        if (apply != null) apply.setText(theme == Prime.themeIndex() && accent == Prime.accentIndex() && seasonal == Season.enabled(activity)
                 ? "Готово" : "Применить и перезапустить");
     }
 

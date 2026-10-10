@@ -412,6 +412,7 @@ struct SettingsScreen: View {
     @AppStorage(Preferences.motion) private var motion = MotionPreference.full.rawValue
     @AppStorage(Preferences.haptics) private var haptics = true
     @AppStorage(Preferences.compactCards) private var compactCards = false
+    @AppStorage(Preferences.seasonal) private var seasonal = true
     @AppStorage("dustore.player.touch-controls") private var touchControls = true
     @AppStorage("dustore.player.input-preset") private var inputPreset = InputPreset.arrows.rawValue
     var body: some View {
@@ -444,6 +445,14 @@ struct SettingsScreen: View {
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Компактные карточки").font(.headline).foregroundColor(Theme.text)
                             Text("Меньше деталей на полке; при крупном системном тексте сохраняется полный размер.")
+                                .font(.caption).foregroundColor(Theme.dim).fixedSize(horizontal: false, vertical: true)
+                        }
+                    }.tint(Theme.selection)
+                    Divider().overlay(Theme.line)
+                    Toggle(isOn: $seasonal) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Сезонное оформление").font(.headline).foregroundColor(Theme.text)
+                            Text("Хеллоуин — весь октябрь, Новый год — с 1 декабря по 31 января. " + Season.current.note + " Изменение вступит в силу при следующем запуске.")
                                 .font(.caption).foregroundColor(Theme.dim).fixedSize(horizontal: false, vertical: true)
                         }
                     }.tint(Theme.selection)

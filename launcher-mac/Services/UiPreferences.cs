@@ -22,6 +22,8 @@ public sealed class UiPreferences
     public bool CompactShelf { get; set; }
     public bool IntroAnimation { get; set; } = true;
     public bool ReduceMotion { get; set; }
+    /// <summary>Both editions: Halloween in October, New Year from December to the end of January.</summary>
+    public bool SeasonalThemes { get; set; } = true;
 
     private static readonly JsonSerializerOptions Json = new() { WriteIndented = true };
 
@@ -131,5 +133,42 @@ public sealed class UiPreferences
             }
         };
         app.RequestedThemeVariant = theme.Light ? ThemeVariant.Light : ThemeVariant.Dark;
+
+        // The action colour is the same in every theme; a season borrows it and must give it back.
+        app.Resources["Accent"] = new SolidColorBrush(Color.Parse("#DDFC85"));
+        app.Resources["AccentHover"] = new SolidColorBrush(Color.Parse("#E9FFA8"));
+        app.Resources["AccentPressed"] = new SolidColorBrush(Color.Parse("#CAE46B"));
+        app.Resources["AccentInk"] = new SolidColorBrush(Color.Parse("#142006"));
+        ApplySeason(app);
+    }
+
+    /// <summary>
+    /// Dresses the brushes for the season of the day. A screenshot or check run stays in the
+    /// ordinary look unless DUSTORE_SEASON asks for one, so its pictures do not depend on the month.
+    /// </summary>
+    private void ApplySeason(Application app)
+    {
+        string? forced = Environment.GetEnvironmentVariable("DUSTORE_SEASON");
+        SeasonKind kind = Program.UiSmoke && string.IsNullOrWhiteSpace(forced)
+            ? SeasonKind.None
+            : Season.Decide(DateTime.Today, SeasonalThemes, forced);
+        if (Season.Colors(kind) is { } colors)
+        {
+            foreach (var (key, color) in colors) app.Resources[key] = new SolidColorBrush(Color.Parse(color));
+            app.Resources["SelectionInk"] = new SolidColorBrush(Color.Parse("#17151F"));
+            app.Resources["SystemAccentColor"] = Color.Parse(colors["Orchid"]);
+            app.Resources["Success"] = new SolidColorBrush(Color.Parse("#32D74B"));
+            app.Resources["Warning"] = new SolidColorBrush(Color.Parse("#FF9F0A"));
+            app.Resources["Danger"] = new SolidColorBrush(Color.Parse("#FF453A"));
+            app.Resources["HeroSurface"] = new LinearGradientBrush
+            {
+                StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(1, 1, RelativeUnit.Relative),
+                GradientStops = new GradientStops { new(Color.Parse(colors["SurfaceRaised"]), 0), new(Color.Parse(colors["Surface"]), 0.75) }
+            };
+            // A season is a night scene: it is dark even over the light theme.
+            app.RequestedThemeVariant = ThemeVariant.Dark;
+        }
+        Season.Set(kind);
     }
 }

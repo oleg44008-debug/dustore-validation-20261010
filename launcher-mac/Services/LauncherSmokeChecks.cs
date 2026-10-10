@@ -192,6 +192,17 @@ public static class LauncherSmokeChecks
             await MustThrowAsync<ArgumentException>(() => service.OpenUrlAsync("file:///etc/passwd", cancellation));
             checks.Add("external URLs are limited to HTTP and HTTPS");
 
+            // Seasonal looks: Halloween is exactly October, New Year runs from 1 December to 31 January.
+            Check(Season.For(new DateTime(2026, 9, 30)) == SeasonKind.None && Season.For(new DateTime(2026, 10, 1)) == SeasonKind.Halloween
+                && Season.For(new DateTime(2026, 10, 31)) == SeasonKind.Halloween && Season.For(new DateTime(2026, 11, 1)) == SeasonKind.None,
+                "the Halloween look covers October and nothing else");
+            Check(Season.For(new DateTime(2026, 11, 30)) == SeasonKind.None && Season.For(new DateTime(2026, 12, 1)) == SeasonKind.NewYear
+                && Season.For(new DateTime(2027, 1, 31)) == SeasonKind.NewYear && Season.For(new DateTime(2027, 2, 1)) == SeasonKind.None,
+                "the New Year look runs from 1 December to 31 January");
+            Check(Season.Decide(new DateTime(2026, 10, 15), false, null) == SeasonKind.None
+                && Season.Decide(new DateTime(2026, 7, 1), false, "newyear") == SeasonKind.NewYear,
+                "the seasonal switch turns it off and an explicit request shows it on any date");
+
             // Use the existing owned Tiny ZIP only as a service-commit fixture.
             var commitOriginal = await service.AddGameAsync(portable, cancellation).ConfigureAwait(false);
             commitOriginal = await service.SetWindowOptionsAsync(commitOriginal.Id, GameLaunchOptions.Windowed, 960, 540, cancellation).ConfigureAwait(false);

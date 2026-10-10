@@ -52,11 +52,11 @@ final class Ui {
     static final int LINE_STRONG = Prime.color("LINE_STRONG", "#535D7E");
 
     static final int TEXT = Color.parseColor("#F5F3FF");
-    static final int MUTED = Color.parseColor("#C7C4D8");
+    static final int MUTED = Prime.color("MUTED", "#C7C4D8");
     /** Только разделители и «водяные» надписи. Для абзаца слишком бледный. */
-    static final int DIM = Color.parseColor("#9394AE");
+    static final int DIM = Prime.color("DIM", "#9394AE");
     /** Абзацы текста: то же настроение, что DIM, но читается с руки. */
-    static final int DIM_FIXED = Color.parseColor("#B1B3CB");
+    static final int DIM_FIXED = Prime.color("DIM_FIXED", "#B1B3CB");
 
     /** Лавандовый акцент выделения. */
     static final int ACCENT = Prime.color("ACCENT", "#B7A4FF");
@@ -68,15 +68,15 @@ final class Ui {
     static final int ACCENT_SUBTLE = Prime.color("ACCENT_SUBTLE", "#29223E");
 
     /** Цитрусовая заливка основного действия. */
-    static final int ACTION = Color.parseColor("#E5F58E");
-    static final int ACTION_PRESSED = Color.parseColor("#C9DF6B");
-    static final int ACTION_INK = Color.parseColor("#17200A");
+    static final int ACTION = Prime.color("ACTION", "#E5F58E");
+    static final int ACTION_PRESSED = Prime.color("ACTION_PRESSED", "#C9DF6B");
+    static final int ACTION_INK = Prime.color("ACTION_INK", "#17200A");
 
     static final int INFO = Color.parseColor("#9DB8FA");
     static final int SUCCESS = Color.parseColor("#81DFAB");
     static final int WARNING = Color.parseColor("#E8C47A");
     static final int DANGER = Color.parseColor("#F08395");
-    static final int FOCUS = Color.parseColor("#D3C7FF");
+    static final int FOCUS = Prime.color("FOCUS", "#D3C7FF");
 
     // -------------------------------------------------------------------- кегли ----
     //

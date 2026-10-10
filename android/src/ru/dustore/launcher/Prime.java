@@ -71,6 +71,9 @@ final class Prime {
 
     /** Цвет роли палитры: стандартный в Free и в теме «Океан». */
     static int color(String role, String standard) {
+        // Сезон (Хеллоуин, Новый год) на свои недели сильнее и темы Prime, и вида Free.
+        String seasonal = Season.color(Season.current(), role);
+        if (seasonal != null) return Color.parseColor(seasonal);
         int at = indexOf(SURFACE_ROLES, role);
         if (ON && at >= 0 && SURFACES[theme] != null) return Color.parseColor(SURFACES[theme][at]);
         at = indexOf(ACCENT_ROLES, role);

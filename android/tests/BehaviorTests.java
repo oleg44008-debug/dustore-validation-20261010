@@ -45,6 +45,18 @@ public final class BehaviorTests {
         check("an upright phone and a tablet are not", !ChromeFont.shortScreen(800) && !ChromeFont.shortScreen(600) && !ChromeFont.shortScreen(480));
         check("an unknown height keeps the ordinary bars", !ChromeFont.shortScreen(0));
 
+        // Seasonal looks: Halloween is exactly October, New Year runs from December to the end of January.
+        check("Halloween is October", Season.of(10) == Season.HALLOWEEN && Season.of(9) == Season.NONE && Season.of(11) == Season.NONE);
+        check("New Year is December and January", Season.of(12) == Season.NEW_YEAR && Season.of(1) == Season.NEW_YEAR && Season.of(2) == Season.NONE);
+        boolean quiet = true;
+        for (int month = 2; month <= 9; month++) quiet &= Season.of(month) == Season.NONE;
+        check("the rest of the year is the ordinary look", quiet);
+        check("the switch turns a season off", Season.decide(10, false, null) == Season.NONE && Season.decide(10, true, null) == Season.HALLOWEEN);
+        check("an explicit request wins on any date", Season.decide(7, false, "newyear") == Season.NEW_YEAR && Season.decide(10, true, "none") == Season.NONE);
+        check("a season recolours the action and leaves unknown roles alone",
+                "#FF9A3D".equals(Season.color(Season.HALLOWEEN, "ACTION")) && "#FFD36B".equals(Season.color(Season.NEW_YEAR, "ACTION"))
+                        && Season.color(Season.NONE, "ACTION") == null && Season.color(Season.HALLOWEEN, "TEXT") == null);
+
         Object first = new Object(), second = new Object();
         check("first session owns compositor", ExSession.acquire(first));
         check("nested probe can use the same owner", ExSession.acquire(first));

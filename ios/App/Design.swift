@@ -1,19 +1,69 @@
 import SwiftUI
 import UIKit
 
+/// The app dresses up twice a year and takes the costume off by itself: Halloween for the
+/// whole of October, New Year from 1 December to 31 January. A season is a palette and one
+/// quiet ornament behind the screens; layout and controls stay where they are.
+enum Season: Equatable {
+    case regular, halloween, newYear
+
+    static func of(month: Int) -> Season {
+        month == 10 ? .halloween : (month == 12 || month == 1) ? .newYear : .regular
+    }
+
+    /// An explicit request wins over the switch, the switch wins over the date.
+    static func decide(month: Int, enabled: Bool, forced: String?) -> Season {
+        switch forced?.lowercased() {
+        case "halloween": return .halloween
+        case "newyear": return .newYear
+        case "none": return Season.regular
+        default: return enabled ? of(month: month) : Season.regular
+        }
+    }
+
+    /// Decided once per launch: the palette below is read into constants.
+    static let current: Season = {
+        let arguments = ProcessInfo.processInfo.arguments
+        var forced: String?
+        if let index = arguments.firstIndex(of: "-dustoreSeason"), index + 1 < arguments.count { forced = arguments[index + 1] }
+        // An owned UI-test launch keeps the ordinary look unless it asks for a season,
+        // so its pictures do not depend on the month.
+        if forced == nil && arguments.contains("-dustoreUITest") { return Season.regular }
+        let enabled = UserDefaults.standard.object(forKey: Preferences.seasonal) as? Bool ?? true
+        return decide(month: Calendar.current.component(.month, from: Date()), enabled: enabled, forced: forced)
+    }()
+
+    var note: String {
+        switch self {
+        case .halloween: return "Сейчас: Хеллоуин — до конца октября."
+        case .newYear: return "Сейчас: Новый год — по 31 января."
+        case .regular: return "Сейчас: обычное оформление."
+        }
+    }
+
+    func pick(_ ordinary: UInt32, _ halloween: UInt32, _ newYear: UInt32) -> UInt32 {
+        switch self {
+        case .halloween: return halloween
+        case .newYear: return newYear
+        case .regular: return ordinary
+        }
+    }
+}
+
 /// Shared Prime roles: obsidian surfaces, lavender selection and pale citrus actions.
+/// Each role names its ordinary colour, then Halloween's, then New Year's.
 enum Theme {
-    static let background = Color(hex: 0x111116)
-    static let card = Color(hex: 0x1C1C25)
-    static let raised = Color(hex: 0x242430)
-    static let inset = Color(hex: 0x15151D)
-    static let line = Color(hex: 0x353541)
-    static let selection = Color(hex: 0xBEB0FF)
-    static let action = Color(hex: 0xECF39A)
-    static let ink = Color(hex: 0x1A1C16)
+    static let background = Color(hex: Season.current.pick(0x111116, 0x0E0A10, 0x0A0F1A))
+    static let card = Color(hex: Season.current.pick(0x1C1C25, 0x201725, 0x151E31))
+    static let raised = Color(hex: Season.current.pick(0x242430, 0x2A1E31, 0x1C2740))
+    static let inset = Color(hex: Season.current.pick(0x15151D, 0x150F19, 0x0E1524))
+    static let line = Color(hex: Season.current.pick(0x353541, 0x45324D, 0x30405F))
+    static let selection = Color(hex: Season.current.pick(0xBEB0FF, 0xB78CFF, 0x9ED8FF))
+    static let action = Color(hex: Season.current.pick(0xECF39A, 0xFF9A3D, 0xFFD36B))
+    static let ink = Color(hex: Season.current.pick(0x1A1C16, 0x1B1206, 0x1A1606))
     static let text = Color(hex: 0xF5F4FA)
-    static let muted = Color(hex: 0xC8C5D3)
-    static let dim = Color(hex: 0xA29EAF)
+    static let muted = Color(hex: Season.current.pick(0xC8C5D3, 0xD9CBD6, 0xC9D6EA))
+    static let dim = Color(hex: Season.current.pick(0xA29EAF, 0xA38FA6, 0x8898B4))
     static let good = Color(hex: 0x8DDBB3)
     static let warn = Color(hex: 0xEDC68C)
     // Names kept for the existing web view and other native components.
@@ -33,6 +83,7 @@ enum Preferences {
     static let motion = "dustore.prime.motion"
     static let haptics = "dustore.prime.haptics"
     static let compactCards = "dustore.prime.compact-cards"
+    static let seasonal = "dustore.seasonal-looks"
 }
 
 enum MotionPreference: String, CaseIterable, Identifiable {
@@ -55,7 +106,83 @@ struct PrimeBackdrop: View {
             Theme.background
             RadialGradient(colors: [Theme.selection.opacity(0.1), .clear], center: .topTrailing,
                            startRadius: 10, endRadius: 480)
+            if Season.current != .regular { SeasonSky() }
         }.ignoresSafeArea().accessibilityHidden(true)
+    }
+}
+
+/// The seasonal ornament behind a screen: a moon with bats, or still snow. It never moves
+/// and never takes a touch.
+struct SeasonSky: View {
+    var body: some View {
+        Canvas { context, size in
+            if Season.current == .halloween { SeasonSky.moon(&context, size) }
+            else if Season.current == .newYear { SeasonSky.snow(&context, size) }
+        }.allowsHitTesting(false)
+    }
+
+    private static func moon(_ context: inout GraphicsContext, _ size: CGSize) {
+        // Beside the screen title, under the edition mark.
+        let radius: CGFloat = 30
+        let centre = CGPoint(x: size.width - 64, y: 164)
+        let halo = CGRect(x: centre.x - radius * 3, y: centre.y - radius * 3, width: radius * 6, height: radius * 6)
+        context.fill(Path(ellipseIn: halo), with: .radialGradient(
+            Gradient(colors: [Color(hex: 0xFF9A3D).opacity(0.16), .clear]), center: centre, startRadius: 0, endRadius: radius * 3))
+        context.fill(Path(ellipseIn: CGRect(x: centre.x - radius, y: centre.y - radius, width: radius * 2, height: radius * 2)),
+                     with: .color(Color(hex: 0xFFE2A8).opacity(0.14)))
+        let crater = GraphicsContext.Shading.color(Color(hex: 0x0E0A10).opacity(0.08))
+        context.fill(Path(ellipseIn: CGRect(x: centre.x - radius * 0.46, y: centre.y - radius * 0.38, width: radius * 0.42, height: radius * 0.42)), with: crater)
+        context.fill(Path(ellipseIn: CGRect(x: centre.x + radius * 0.14, y: centre.y + radius * 0.10, width: radius * 0.30, height: radius * 0.30)), with: crater)
+
+        let wing = GraphicsContext.Shading.color(Color(hex: 0x6A5390).opacity(0.55))
+        context.fill(bat(at: CGPoint(x: centre.x - radius * 1.7, y: centre.y - radius * 0.7), span: 26, tilt: -9), with: wing)
+        context.fill(bat(at: CGPoint(x: centre.x - radius * 0.3, y: centre.y - radius * 1.6), span: 17, tilt: 7), with: wing)
+    }
+
+    // Half a bat, head to tail, on a unit wingspan; the other half is its mirror.
+    private static let batHalf: [CGPoint] = [
+        CGPoint(x: 0, y: -0.10), CGPoint(x: 0.035, y: -0.07), CGPoint(x: 0.065, y: -0.17), CGPoint(x: 0.095, y: -0.05),
+        CGPoint(x: 0.30, y: -0.15), CGPoint(x: 0.50, y: -0.06), CGPoint(x: 0.39, y: 0.02), CGPoint(x: 0.30, y: -0.01),
+        CGPoint(x: 0.24, y: 0.08), CGPoint(x: 0.15, y: 0.03), CGPoint(x: 0.09, y: 0.11), CGPoint(x: 0, y: 0.16)
+    ]
+
+    private static func bat(at centre: CGPoint, span: CGFloat, tilt: CGFloat) -> Path {
+        var outline = batHalf
+        outline.append(contentsOf: batHalf.dropFirst().dropLast().reversed().map { CGPoint(x: -$0.x, y: $0.y) })
+        var path = Path()
+        path.addLines(outline)
+        path.closeSubpath()
+        let transform = CGAffineTransform(translationX: centre.x, y: centre.y).rotated(by: tilt * .pi / 180).scaledBy(x: span, y: span)
+        return path.applying(transform)
+    }
+
+    private static func snow(_ context: inout GraphicsContext, _ size: CGSize) {
+        // The same flakes on every draw: a small fixed-seed generator, positions as fractions of the screen.
+        var state: UInt64 = 2027
+        func next() -> CGFloat {
+            state = state &* 6364136223846793005 &+ 1442695040888963407
+            return CGFloat((state >> 33) % 10_000) / 10_000
+        }
+        let ink = Color(hex: 0xD8EAFB)
+        for _ in 0..<40 {
+            let x = next() * size.width
+            let fall = next()
+            let y = fall * fall * size.height
+            let flake = 1.4 + next() * 3.2
+            let alpha = 0.08 + Double(next()) * 0.14
+            if flake < 3.2 {
+                context.fill(Path(ellipseIn: CGRect(x: x - flake / 2, y: y - flake / 2, width: flake, height: flake)), with: .color(ink.opacity(alpha)))
+            } else {
+                var arms = Path()
+                let radius = flake * 1.5, turn = next() * 60
+                for arm in 0..<3 {
+                    let angle = (turn + CGFloat(arm) * 60) * .pi / 180
+                    arms.move(to: CGPoint(x: x - cos(angle) * radius, y: y - sin(angle) * radius))
+                    arms.addLine(to: CGPoint(x: x + cos(angle) * radius, y: y + sin(angle) * radius))
+                }
+                context.stroke(arms, with: .color(ink.opacity(alpha + 0.06)), style: StrokeStyle(lineWidth: 1, lineCap: .round))
+            }
+        }
     }
 }
 

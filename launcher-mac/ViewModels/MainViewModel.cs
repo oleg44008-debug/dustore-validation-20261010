@@ -493,6 +493,13 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         set { _ui.ReduceMotion = value; _ui.Save(_services.DataDirectory); Notify(nameof(ReduceMotion)); Notify(nameof(EffectiveReduceMotion)); Notify(nameof(IntroAnimation)); }
     }
     public bool EffectiveReduceMotion => ReduceMotion || _systemReduceMotion;
+    /// <summary>Free and Prime: the look changes for Halloween and New Year and changes back by itself.</summary>
+    public bool SeasonalThemes
+    {
+        get => _ui.SeasonalThemes;
+        set { _ui.SeasonalThemes = value; _ui.Save(_services.DataDirectory); _ui.Apply(); Notify(nameof(SeasonalThemes)); Notify(nameof(SeasonNote)); }
+    }
+    public string SeasonNote => "Хеллоуин — весь октябрь, Новый год — с 1 декабря по 31 января. " + Season.Describe(Season.Current);
     public string MotionPreferenceNote => _systemReduceMotion
         ? "В macOS включено уменьшение движения: лаунчер соблюдает системный выбор."
         : "Уменьшение движения действует в Free и Prime. Системный выбор macOS также учитывается.";

@@ -157,8 +157,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/DustoreApp.java",
-   "bytes": 412,
-   "sha256": "c5596e63a312b2918219e3ec36ba053869932c4bf58f1f97159baf0f3811676b"
+   "bytes": 587,
+   "sha256": "6789362722c6bdf3e4ed5fc748332bbc6f3d8c2aa73818479be3a9b5cea98281"
   },
   {
    "path": "src/ru/dustore/launcher/Ex.java",
@@ -417,23 +417,33 @@
   },
   {
    "path": "src/ru/dustore/launcher/PremiumNav.java",
-   "bytes": 3633,
-   "sha256": "1428089da25d198445eaab586fe5e439028b6b9c3a2fcadfcc61b140cd6726c6"
+   "bytes": 3775,
+   "sha256": "2f49312ab5e1541f19490ebd0a0dea6e7a9d7195dd9ac8e88a6a704b1201f698"
   },
   {
    "path": "src/ru/dustore/launcher/Prime.java",
-   "bytes": 13915,
-   "sha256": "ed819740503fe85b781edc9d69ecd93d88f1b609a01c705df2410d1557a34609"
+   "bytes": 14186,
+   "sha256": "4445f09f68a75490ce190fb33dd09d974d9af5f60be823d4435e52187907214a"
   },
   {
    "path": "src/ru/dustore/launcher/PrimeAppearance.java",
-   "bytes": 13468,
-   "sha256": "779310effc41503b3d380aae21b9fed5e8a170d452b8ec8bd6e4ab229367e961"
+   "bytes": 14682,
+   "sha256": "dc5decf132678cadbf1c98fd8b4bdf9e2af60f44b6009ef38f17b4897b890040"
   },
   {
    "path": "src/ru/dustore/launcher/PrimeIntro.java",
    "bytes": 2618,
    "sha256": "dbed6cb38bff809531150db00cc4092256f52d5ab6db784759c1d06a02953cf9"
+  },
+  {
+   "path": "src/ru/dustore/launcher/Season.java",
+   "bytes": 4648,
+   "sha256": "4fcf41feb974c773d887b81b53ad898ead1486ee7134ae41106e02afdaef5b42"
+  },
+  {
+   "path": "src/ru/dustore/launcher/SeasonArt.java",
+   "bytes": 4236,
+   "sha256": "83761bc1f21eeb8c38b9d06ae465bae8e1ee4c169f944f3287ec71e256cb8697"
   },
   {
    "path": "src/ru/dustore/launcher/Speaker.java",
@@ -457,8 +467,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/Ui.java",
-   "bytes": 48312,
-   "sha256": "d77639415645d9aab1cb1788cabe735f8075716bee2762f5aa24ac2fb00dcc4d"
+   "bytes": 48357,
+   "sha256": "09e14c554aa0a42ebcd0cd0665234b383645921ce4b5fd6570d5103bbe3dcce8"
   },
   {
    "path": "src/ru/dustore/launcher/UiWork.java",
@@ -492,8 +502,8 @@
   },
   {
    "path": "tests/BehaviorTests.java",
-   "bytes": 7224,
-   "sha256": "a223915289358acec40419e8ccad0b3848ecd53568a45cff0d697c69e7634650"
+   "bytes": 8454,
+   "sha256": "c04819bbf77084c8010abedb1fd4d1a31722e96fb3febfc69e467506de1b4d79"
   },
   {
    "path": "tests/ExTests.java",

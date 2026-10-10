@@ -176,6 +176,15 @@ def main() -> int:
                         # these supplementary whole-simulator frames document launch.
                         time.sleep(3)
                         run.run(name + "-screen", ["xcrun", "simctl", "io", identifier, "screenshot", str(run.out / (name + ".png"))], 60)
+                # Seasonal looks on the phone: pictures only, never a failure.
+                if device["kind"].lower() == "iphone":
+                    for season in ["halloween", "newyear"]:
+                        name = "iphone-season-" + season
+                        if run.run(name + "-launch", ["xcrun", "simctl", "launch", "--terminate-running-process", identifier,
+                                "ru.dustore.launcher.ios", "-dustoreUITest", "-dustoreFixture", "library", "-dustoreOfflineStore",
+                                "-dustoreSeason", season], 60, env=env, required=False):
+                            time.sleep(3)
+                            run.run(name + "-screen", ["xcrun", "simctl", "io", identifier, "screenshot", str(run.out / (name + ".png"))], 60, required=False)
             packages = run.artifact / "packages"
             packages.mkdir(exist_ok=True)
             run.run("simulator-package", ["ditto", "-c", "-k", "--keepParent", str(simulator_app),

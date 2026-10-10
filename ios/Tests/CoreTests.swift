@@ -59,6 +59,18 @@ final class CoreTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: game.webRoot.appendingPathComponent("index.html").path))
         XCTAssertFalse(FileManager.default.fileExists(atPath: game.folder.appendingPathComponent("src").path))
     }
+    func testSeasonalLooksFollowTheCalendar() {
+        XCTAssertEqual(Season.of(month: 10), .halloween)
+        XCTAssertEqual(Season.of(month: 12), .newYear)
+        XCTAssertEqual(Season.of(month: 1), .newYear)
+        for month in [2, 3, 4, 5, 6, 7, 8, 9, 11] { XCTAssertEqual(Season.of(month: month), Season.regular, "month \(month)") }
+        XCTAssertEqual(Season.decide(month: 10, enabled: false, forced: nil), Season.regular, "The switch turns a season off.")
+        XCTAssertEqual(Season.decide(month: 7, enabled: false, forced: "newyear"), .newYear, "An explicit request wins on any date.")
+        XCTAssertEqual(Season.decide(month: 10, enabled: true, forced: "none"), Season.regular)
+        XCTAssertEqual(Season.halloween.pick(1, 2, 3), 2)
+        XCTAssertEqual(Season.newYear.pick(1, 2, 3), 3)
+        XCTAssertEqual(Season.regular.pick(1, 2, 3), 1)
+    }
     func testMotionPolicyRespectsOffAndSystemReduceMotion() {
         XCTAssertNil(MotionPreference.off.animation(reduceMotion: false))
         XCTAssertFalse(MotionPreference.full.moves(reduceMotion: true))

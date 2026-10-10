@@ -19,6 +19,7 @@ final class PremiumNav extends LinearLayout {
     private final Matrix materialTransform = new Matrix();
     private final LinearGradient material = new LinearGradient(0, 0, 1, 1,
             Ui.alpha(Ui.ACCENT, 0x30), Ui.alpha(Ui.ACCENT, 0x12), Shader.TileMode.CLAMP);
+    private final SeasonArt season = new SeasonArt();
     private float left;
     private float right;
     private int selected;
@@ -62,6 +63,7 @@ final class PremiumNav extends LinearLayout {
 
     @Override protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        season.drawBar(canvas, getWidth(), getResources().getDisplayMetrics().density);
         if (getChildCount() == 0 || right <= left) return;
         View tab = getChildAt(selected);
         float inset = Ui.dp(getContext(), 2);

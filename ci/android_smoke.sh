@@ -117,5 +117,24 @@ fi
 # Deaths the two checks above cannot see: a native crash or the app ending itself.
 grep -E "Process $PKG .* has died|Fatal signal|tombstone" "$OUT/logcat.txt" | grep -v "depends on provider" | head -5 >> "$OUT/summary.txt" || true
 grep -E "StrictMode|W/System.err|E/AndroidRuntime" "$OUT/logcat.txt" | grep -c . > "$OUT/warnings-count.txt" || true
+# Seasonal looks. The emulator keeps the real date, so the pictures above already show the
+# season of the month; December is shown by moving the clock (the emulator allows root).
+# Pictures only: nothing here counts as a failure.
+if adb root > /dev/null 2>&1; then
+  sleep 4
+  adb wait-for-device
+  adb shell settings put global auto_time 0
+  adb shell "date 121512002026.00" > "$OUT/season-date.txt" 2>&1
+  start_app
+  sleep 15
+  shot 06-december
+  tab 2; shot 06-december-library
+  tab 3; shot 06-december-computer
+  adb shell "date 071512002026.00" >> "$OUT/season-date.txt" 2>&1
+  start_app
+  sleep 12
+  tab 2; shot 06-july-library
+  adb shell settings put global auto_time 1
+fi
 note "failures: $failures"
 exit $failures
