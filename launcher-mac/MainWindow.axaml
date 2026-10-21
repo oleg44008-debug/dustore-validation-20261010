@@ -585,8 +585,11 @@
                   <TextBlock Text="Prime" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource Orchid}" />
                 </Border>
               </Grid>
+              <c:UltraGraphic Margin="0,4,0,6" />
               <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
                          Text="ULTRA помогает игре идти быстрее. Он включается для каждой игры отдельно — кнопкой ULTRA в её параметрах — и работает, пока игра запущена." />
+              <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
+                         Text="•  Умный подбор. ULTRA запоминает каждую игру: насколько она занимала видеокарту и в каком разрешении. Не хватало — в следующий раз на ступень ниже, был запас — на ступень выше: кадры там, где они нужны, чёткость там, где кадров хватает." />
               <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
                          Text="•  Меньше точек — больше кадров. Игра на Unity, открытая на весь экран, рисует картинку чуть меньшего разрешения и растягивает её сама: кадров больше, изображение немного мягче. Для этого выберите в параметрах игры полноэкранный режим." />
               <TextBlock Classes="secondary" FontSize="13" TextWrapping="Wrap"
@@ -600,6 +603,10 @@
                 <ComboBox Grid.Column="1" Name="UltraRenderBox" ItemsSource="{Binding UltraRenderChoices}" SelectedIndex="{Binding UltraRenderIndex, Mode=TwoWay}"
                           MaxWidth="380" HorizontalAlignment="Left" AutomationProperties.Name="Разрешение рендера ULTRA" />
               </Grid>
+              <TextBlock FontSize="13" FontWeight="SemiBold" Text="Что ULTRA знает о ваших играх" Margin="0,6,0,0" IsVisible="{Binding IsPrime}" />
+              <TextBlock Classes="dim" FontSize="12" TextWrapping="Wrap" Text="{Binding UltraKnownGames}" IsVisible="{Binding IsPrime}" />
+              <Button Classes="pill" Content="Начать подбор заново" Command="{Binding UltraForgetCommand}" HorizontalAlignment="Left"
+                      IsVisible="{Binding UltraHasKnownGames}" AutomationProperties.Name="Забыть измерения ULTRA" />
             </StackPanel>
           </Border>
           <Border Name="LibrarySettingsCard" Classes="card">

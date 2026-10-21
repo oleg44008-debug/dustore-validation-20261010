@@ -229,7 +229,14 @@ public sealed class LauncherServices
         bool ultra = Edition.IsPrime && entry.Ultra;
         // ULTRA keeps the player's window; a Unity game opened full screen renders fewer pixels.
         var arguments = GameLaunchOptions.Arguments(engine, entry.WindowMode, entry.WindowWidth, entry.WindowHeight);
-        if (ultra) arguments = UltraMode.ScaleArguments(arguments, engine, UltraMode.RenderScale, out _).Concat(UltraMode.Arguments(engine)).ToArray();
+        bool smart = ultra && UltraMode.NormalizeScale(UltraMode.RenderScale) == UltraSmart.Smart;
+        int percent = smart ? UltraSmart.Choose(UltraSmart.Known(DataDirectory, entry.Id), out _) : UltraMode.RenderScale;
+        (int Width, int Height)? scaled = null;
+        if (ultra) arguments = UltraMode.ScaleArguments(arguments, engine, percent, out scaled).Concat(UltraMode.Arguments(engine)).ToArray();
+        // Smart ULTRA learns from the GPU's load while the game runs; a game it cannot scale
+        // is not watched — nothing would change for it next time.
+        if (smart && scaled is not null || smart && percent == 85 && engine == GameEngineKind.Unity)
+            UltraSmart.Watch(DataDirectory, entry, scaled is null ? 100 : percent, () => NativeAppSessions.Find(entry.Id) is not null || GameSessions.Find(entry.Id) is not null);
         bool wine = WineRuntime.IsWineWrapper(app);
         if (wine && WineRuntime.WineBinary is { } wineBinary && GameLaunchOptions.WinePrefixOf(app) is { } wrapperPrefix)
             await GameLaunchOptions.ReleaseDisplayCaptureAsync(wineBinary, wrapperPrefix, cancellation).ConfigureAwait(false);

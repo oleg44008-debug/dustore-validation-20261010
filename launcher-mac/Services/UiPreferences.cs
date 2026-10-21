@@ -26,6 +26,8 @@ public sealed class UiPreferences
     public bool SeasonalThemes { get; set; } = true;
     /// <summary>Prime: the share of the display, per side, a Unity game renders at under ULTRA when full screen.</summary>
     public int UltraRenderScale { get; set; } = UltraMode.DefaultRenderScale;
+    /// <summary>Set once smart ULTRA has been offered: a profile on the old 85 % default moves to it once.</summary>
+    public bool UltraSmartIntroduced { get; set; }
 
     private static readonly JsonSerializerOptions Json = new() { WriteIndented = true };
 
@@ -34,7 +36,16 @@ public sealed class UiPreferences
         try
         {
             string path = Path.Combine(dataDirectory, "appearance.json");
-            if (File.Exists(path)) return JsonSerializer.Deserialize<UiPreferences>(File.ReadAllText(path)) ?? new();
+            if (File.Exists(path))
+            {
+                var loaded = JsonSerializer.Deserialize<UiPreferences>(File.ReadAllText(path)) ?? new();
+                if (!loaded.UltraSmartIntroduced)
+                {
+                    if (loaded.UltraRenderScale == 85) loaded.UltraRenderScale = UltraSmart.Smart;
+                    loaded.UltraSmartIntroduced = true;
+                }
+                return loaded;
+            }
         }
         catch (Exception) { }
         return new();

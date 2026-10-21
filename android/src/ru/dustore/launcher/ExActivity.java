@@ -78,7 +78,8 @@ public final class ExActivity extends Activity {
 
     // ULTRA: в каком размере идёт эта игра. Решается один раз за сеанс — экран, указатель и
     // сама игра обязаны сойтись в одном числе.
-    private boolean scaleDecided, scaleLowered;
+    private boolean scaleDecided;
+    private int scaleLevel;
     private final int[] gameFpsSamples = new int[3600];
     private int gameFpsCount;
 
@@ -88,12 +89,12 @@ public final class ExActivity extends Activity {
         if (!scaleDecided) {
             scaleDecided = true;
             int remembered = ExScale.remembered(this, scaleKey());
-            scaleLowered = scaleKey() != null && ExScale.lowered(Prime.maxFps(), ExScale.mode(this), remembered);
-            int[] chosen = ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLowered);
-            String note = ExScale.describe(scaleLowered, chosen, ExScale.mode(this), remembered);
+            scaleLevel = scaleKey() == null ? 0 : ExScale.level(Prime.maxFps(), ExScale.mode(this), remembered);
+            int[] chosen = ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLevel);
+            String note = ExScale.describe(scaleLevel, chosen, ExScale.mode(this), remembered);
             if (note != null) say(note);
         }
-        return ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLowered);
+        return ExScale.size(recipe != null && "Unity".equals(recipe.engine), scaleLevel);
     }
 
     /** После сеанса: медленная игра в следующий раз пойдёт в меньшем размере. */
@@ -104,7 +105,7 @@ public final class ExActivity extends Activity {
         int[] played = java.util.Arrays.copyOfRange(gameFpsSamples, skip, gameFpsCount);
         ExDisplay screen = display;
         int frames = screen == null ? 0 : screen.gameFrames();
-        ExScale.remember(this, scaleKey(), ExScale.learn(ExScale.remembered(this, scaleKey()), scaleLowered,
+        ExScale.remember(this, scaleKey(), ExScale.learnLevel(ExScale.remembered(this, scaleKey()), scaleLevel,
                 ExScale.median(played, played.length), gameFpsCount, frames));
     }
 

@@ -178,11 +178,13 @@ final class PrimeAppearance {
         if (Prime.ON) content.addView(scale);
         content.addView(Ui.gap(activity, 10));
         if (Prime.ON) {
+            content.addView(new UltraSteps(activity));
+            content.addView(Ui.gap(activity, 10));
             content.addView(Ui.paragraph(activity, "Что такое ULTRA. Режим Prime, который помогает играм идти плавнее. Он работает, пока игра на экране, и ничего не меняет в телефоне и в других приложениях.", Ui.T_MICRO, Ui.DIM_FIXED));
             content.addView(Ui.gap(activity, 6));
             content.addView(Ui.paragraph(activity, "•  Кадры до возможностей экрана: окно игры обновляется на 90–120 Гц, а не на 60, пока телефон не греется и не включено энергосбережение.", Ui.T_MICRO, Ui.DIM_FIXED));
             content.addView(Ui.gap(activity, 6));
-            content.addView(Ui.paragraph(activity, "•  Игры eX: ULTRA запоминает, как шла игра. Если медленно — в следующий раз она рисуется в меньшем размере: кадров больше, картинка чуть мягче. Не подошло — размер возвращается сам. «Размер игр eX»: «Авто» решает по игре, «Стандарт» никогда не уменьшает, «Быстрее» уменьшает всегда.", Ui.T_MICRO, Ui.DIM_FIXED));
+            content.addView(Ui.paragraph(activity, "•  Умный подбор для игр eX: ULTRA запоминает, как шла каждая игра. Медленно — в следующий раз она рисуется на ступень меньше (до двух ступеней); кадров с запасом — размер снова крупнее, картинка чётче. Не подошло — размер возвращается сам. «Размер игр eX»: «Авто» решает по игре, «Стандарт» никогда не уменьшает, «Быстрее» — сразу на ступень меньше.", Ui.T_MICRO, Ui.DIM_FIXED));
             content.addView(Ui.gap(activity, 6));
             content.addView(Ui.paragraph(activity, "Чего ждать: больше всего меньший размер помогает телефонам без ускорения графики. Если игре не хватает процессора, кадров прибавится мало.", Ui.T_MICRO, Ui.DIM_FIXED));
         }

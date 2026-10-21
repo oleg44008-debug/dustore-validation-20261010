@@ -413,6 +413,7 @@ struct SettingsScreen: View {
     @AppStorage(Preferences.haptics) private var haptics = true
     @AppStorage(Preferences.compactCards) private var compactCards = false
     @AppStorage(Preferences.seasonal) private var seasonal = true
+    @AppStorage(Preferences.ultra) private var ultra = true
     @AppStorage("dustore.player.touch-controls") private var touchControls = true
     @AppStorage("dustore.player.input-preset") private var inputPreset = InputPreset.arrows.rawValue
     var body: some View {
@@ -457,6 +458,20 @@ struct SettingsScreen: View {
                         }
                     }.tint(Theme.selection)
                 }.primeArrival(delay: 0.08)
+                if Edition.isPrime {
+                    Card {
+                        Eyebrow(text: "ULTRA")
+                        UltraStepsView()
+                        Toggle(isOn: $ultra) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Умный ULTRA для веб-игр").font(.headline).foregroundColor(Theme.text)
+                                Text("Игра рисует картинку с меньшей плотностью точек, и система растягивает её на экран: кадров больше, изображение чуть мягче. ULTRA считает кадры каждой игры: медленно — в следующий раз ступень ниже, кадров с запасом — ступень выше. Файлы игры не меняются.")
+                                    .font(.caption).foregroundColor(Theme.dim).fixedSize(horizontal: false, vertical: true)
+                            }
+                        }.tint(Theme.selection)
+                        .accessibilityIdentifier("settings.ultra")
+                    }.primeArrival(delay: 0.09)
+                }
                 Card {
                     Eyebrow(text: "Игровое управление")
                     Toggle("Экранные кнопки", isOn: $touchControls).tint(Theme.selection)

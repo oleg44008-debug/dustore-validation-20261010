@@ -502,8 +502,22 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
     public string SeasonNote => "Хеллоуин — весь октябрь, Новый год — с 1 декабря по 31 января. " + Season.Describe(Season.Current);
 
     /// <summary>ULTRA: how much smaller a full-screen Unity game renders. Shown in Settings.</summary>
-    public IReadOnlyList<string> UltraRenderChoices { get; } = UltraMode.RenderScales.Select(scale => scale >= 100 ? "Не менять · 100 %"
-        : (scale == 85 ? "Баланс" : scale == 75 ? "Больше кадров" : "Максимум кадров") + " · " + scale + " % · на " + (100 - (int)Math.Round(scale * scale / 100.0)) + " % меньше точек").ToArray();
+    public IReadOnlyList<string> UltraRenderChoices { get; } = UltraMode.RenderScales.Select(scale => scale == UltraSmart.Smart ? "Умный · подбирает для каждой игры"
+        : scale >= 100 ? "Не менять · 100 %"
+        : (scale == 85 ? "Баланс" : scale == 75 ? "Больше кадров" : "Максимум кадров") + " · всегда " + scale + " % · на " + (100 - (int)Math.Round(scale * scale / 100.0)) + " % меньше точек").ToArray();
+
+    /// <summary>What smart ULTRA has learnt, one line per game, for the ULTRA card.</summary>
+    public string UltraKnownGames
+    {
+        get
+        {
+            var notes = UltraSmart.AllKnown(_services.DataDirectory);
+            if (notes.Count == 0) return "Пока ничего: ULTRA узнаёт игру за первый же сеанс — насколько она занимает видеокарту — и в следующий раз подбирает ей разрешение.";
+            return string.Join("\n", notes.Take(8).Select(note => "•  " + UltraSmart.Describe(note))) + (notes.Count > 8 ? "\n…и ещё " + (notes.Count - 8) + "." : "");
+        }
+    }
+    public bool UltraHasKnownGames => UltraSmart.AllKnown(_services.DataDirectory).Count > 0;
+    public ICommand UltraForgetCommand => new RelayCommand(() => { UltraSmart.Forget(_services.DataDirectory); Notify(nameof(UltraKnownGames)); Notify(nameof(UltraHasKnownGames)); });
     public int UltraRenderIndex
     {
         get => Math.Max(0, Array.IndexOf(UltraMode.RenderScales, UltraMode.NormalizeScale(_ui.UltraRenderScale)));
@@ -511,6 +525,7 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         {
             if (value < 0 || value >= UltraMode.RenderScales.Length || !Edition.IsPrime) return;
             _ui.UltraRenderScale = UltraMode.RenderScales[value];
+            _ui.UltraSmartIntroduced = true;
             _ui.Save(_services.DataDirectory);
             UltraMode.RenderScale = _ui.UltraRenderScale;
             Notify(nameof(UltraRenderIndex));

@@ -92,6 +92,18 @@ public static class LauncherSmokeChecks
             Check(ReferenceEquals(UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, 100, out _), fullScreen)
                 && ReferenceEquals(UltraMode.ScaleArguments(godot, GameEngineKind.Godot, 75, out var godotSize), godot) && godotSize is null,
                 "ULTRA changes nothing at 100 % and nothing for other engines");
+            Check(UltraMode.DefaultRenderScale == UltraSmart.Smart && ReferenceEquals(UltraMode.ScaleArguments(fullScreen, GameEngineKind.Unity, UltraSmart.Smart, out _), fullScreen),
+                "smart ULTRA is the default, and as a setting it scales nothing by itself");
+            Check(UltraSmart.Choose(null, out _) == 85, "smart ULTRA starts a game it has not seen at 85 %");
+            Check(UltraSmart.Choose(new UltraSmart.Note { GpuLoad = 95, Samples = 20, Scale = 85 }, out _) == 75
+                && UltraSmart.Choose(new UltraSmart.Note { GpuLoad = 99, Samples = 20, Scale = 75 }, out _) == 75,
+                "smart ULTRA steps down when the GPU was flat out, never below 75 %");
+            Check(UltraSmart.Choose(new UltraSmart.Note { GpuLoad = 40, Samples = 20, Scale = 85 }, out _) == 100
+                && UltraSmart.Choose(new UltraSmart.Note { GpuLoad = 72, Samples = 20, Scale = 85 }, out _) == 85,
+                "smart ULTRA steps up only with room to spare, and otherwise holds");
+            Check(UltraSmart.ParseUtilization("+-o AGXAcceleratorG13X\n  \"PerformanceStatistics\" = {\"In use system memory\"=1,\"Device Utilization %\"=37,\"Renderer Utilization %\"=30}\n  \"PerformanceStatistics\" = {\"Device Utilization %\"=81}") == 81
+                && UltraSmart.ParseUtilization("no accelerators") is null,
+                "the GPU's load is read from the I/O Registry, busiest accelerator first");
             var small = new[] { "-screen-fullscreen", "1", "-screen-width", "1024", "-screen-height", "640" };
             Check(ReferenceEquals(UltraMode.ScaleArguments(small, GameEngineKind.Unity, 67, out _), small), "ULTRA leaves a small display alone");
             string ultraDir = Path.Combine(Path.GetTempPath(), "dustore-ultra-" + Guid.NewGuid().ToString("N"));

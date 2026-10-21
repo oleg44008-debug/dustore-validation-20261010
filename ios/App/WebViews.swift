@@ -212,6 +212,13 @@ struct GameWebView: UIViewRepresentable {
         configuration.mediaTypesRequiringUserActionForPlayback = []
         configuration.userContentController.add(context.coordinator, name: "ex")
         configuration.userContentController.addUserScript(WKUserScript(source: GameInput.bridgeScript, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // Prime: smart ULTRA asks the game for a lower pixel density and counts its frames.
+        if UltraWeb.enabled {
+            let step = UltraWeb.step(for: UltraWeb.note(for: game.id))
+            session.ultraStep = step
+            let density = UltraWeb.density(step: step, screenScale: UIScreen.main.scale)
+            configuration.userContentController.addUserScript(WKUserScript(source: UltraWeb.script(density: density), injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        }
         let view = WKWebView(frame: .zero, configuration: configuration)
         view.navigationDelegate = context.coordinator
         view.scrollView.isScrollEnabled = false

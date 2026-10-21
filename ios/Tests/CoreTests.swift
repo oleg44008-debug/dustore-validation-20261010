@@ -10,6 +10,25 @@ final class CoreTests: XCTestCase {
         addTeardownBlock { try? FileManager.default.removeItem(at: folder) }
         return folder
     }
+    func testSmartUltraLearnsPerGame() {
+        // A slow session one step down; never below the last step.
+        XCTAssertEqual(UltraWeb.learn(nil, playedAt: 0, medianFps: 30, samples: 60).step, 1)
+        XCTAssertEqual(UltraWeb.learn(UltraWeb.Note(step: 2, fps: 20, triedSharper: false), playedAt: 2, medianFps: 20, samples: 60).step, 2)
+        // Smooth one step down: the sharper step is offered once, and a slow answer settles it.
+        let offered = UltraWeb.learn(UltraWeb.Note(step: 1, fps: 30, triedSharper: false), playedAt: 1, medianFps: 60, samples: 60)
+        XCTAssertEqual(offered.step, 0); XCTAssertTrue(offered.triedSharper)
+        let settled = UltraWeb.learn(offered, playedAt: 0, medianFps: 35, samples: 60)
+        XCTAssertEqual(settled.step, 1)
+        XCTAssertEqual(UltraWeb.learn(settled, playedAt: 1, medianFps: 60, samples: 60).step, 1)
+        // A short session teaches nothing; idle seconds do not count.
+        XCTAssertEqual(UltraWeb.learn(nil, playedAt: 0, medianFps: 10, samples: 5).step, 0)
+        XCTAssertEqual(UltraWeb.median([0, 30, 31, 29, 0]), 30)
+        // Density: a share of the screen's, never below one pixel per point.
+        XCTAssertEqual(UltraWeb.density(step: 1, screenScale: 3), 2.25, accuracy: 0.001)
+        XCTAssertEqual(UltraWeb.density(step: 2, screenScale: 2), 1.0, accuracy: 0.001)
+        XCTAssertTrue(UltraWeb.script(density: 2.25).contains("devicePixelRatio"))
+    }
+
     func testLegacyLibraryDecodesWithoutNewMetadata() throws {
         let json = """
         [{"id":"00850164-0568-4005-9DEA-0697F3C75CF2","title":"Старая игра","kind":"web","added":0}]

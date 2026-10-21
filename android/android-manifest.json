@@ -177,8 +177,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/ExActivity.java",
-   "bytes": 57704,
-   "sha256": "02d2bb1688fbe107552f4aca386ede17162fd693be1506f23ec9f59e3a288243"
+   "bytes": 57715,
+   "sha256": "7ca4e4db876288bff667379af98f441b17f0e464b07c9498b06f3b898152b63d"
   },
   {
    "path": "src/ru/dustore/launcher/ExApk.java",
@@ -277,8 +277,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/ExScale.java",
-   "bytes": 6850,
-   "sha256": "def3bfb981f1b110495bcaa89e19241cee198842c045527dfdbb47d2579fcb38"
+   "bytes": 9587,
+   "sha256": "6a1b49acfa1c1c0cc4d2a6d99504f95603fe188041c75156f7d33ea1599287ad"
   },
   {
    "path": "src/ru/dustore/launcher/ExScreen.java",
@@ -442,8 +442,8 @@
   },
   {
    "path": "src/ru/dustore/launcher/PrimeAppearance.java",
-   "bytes": 16808,
-   "sha256": "4cb456d4b556e053eabec773664e2e0e06eaf7ed36c082b792c56ef71c41731a"
+   "bytes": 17035,
+   "sha256": "d941455cc12f4451530d563feaa2dc45730c43dc3b69af772f2f371f76a255bf"
   },
   {
    "path": "src/ru/dustore/launcher/PrimeIntro.java",
@@ -501,6 +501,11 @@
    "sha256": "808b0fa0aab49dd61d1443a2b95718bc5c9fb94a9a25b57b6de170c0933442ce"
   },
   {
+   "path": "src/ru/dustore/launcher/UltraSteps.java",
+   "bytes": 3981,
+   "sha256": "a94a1411890fa7ce53e6501199312628cebd500b40eb3a8cf8fd00125abe06e1"
+  },
+  {
    "path": "src/ru/dustore/launcher/Unpack.java",
    "bytes": 6739,
    "sha256": "8d87d99e9750abae4e227885c7d3c935eab4a91223742135920e0f3557ca2d8b"
@@ -522,8 +527,8 @@
   },
   {
    "path": "tests/BehaviorTests.java",
-   "bytes": 11580,
-   "sha256": "001ebaa8443800800eec99ed0c5ee8490b59a093f67c67040293fd6418c45aa7"
+   "bytes": 12768,
+   "sha256": "c3447a90ca93e8408dd455e5e466abe378b53c614d5781f97de23d28a83195f9"
   },
   {
    "path": "tests/ExTests.java",

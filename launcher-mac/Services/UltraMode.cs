@@ -32,8 +32,9 @@ public static class UltraMode
     public static IReadOnlyList<string> Arguments(GameEngineKind engine) => Array.Empty<string>();
 
     /// <summary>The choices in Settings, as a share of the display per side; 100 leaves the game alone.</summary>
-    public static readonly int[] RenderScales = { 85, 75, 67, 100 };
-    public const int DefaultRenderScale = 85;
+    public static readonly int[] RenderScales = { UltraSmart.Smart, 85, 75, 67, 100 };
+    /// <summary>Smart ULTRA: the share is chosen per game (see <see cref="UltraSmart"/>).</summary>
+    public const int DefaultRenderScale = UltraSmart.Smart;
     /// <summary>The user's choice, set from the saved preferences.</summary>
     public static int RenderScale { get; set; } = DefaultRenderScale;
 
@@ -52,7 +53,8 @@ public static class UltraMode
     {
         applied = null;
         percent = NormalizeScale(percent);
-        if (percent >= 100 || engine != GameEngineKind.Unity) return arguments;
+        // "Smart" is a setting, not a share: the share for a launch is chosen before this.
+        if (percent >= 100 || percent < 50 || engine != GameEngineKind.Unity) return arguments;
         int full = IndexOf(arguments, "-screen-fullscreen"), widthAt = IndexOf(arguments, "-screen-width"), heightAt = IndexOf(arguments, "-screen-height");
         if (full < 0 || full + 1 >= arguments.Count || arguments[full + 1] != "1") return arguments;
         if (widthAt < 0 || heightAt < 0 || widthAt + 1 >= arguments.Count || heightAt + 1 >= arguments.Count) return arguments;

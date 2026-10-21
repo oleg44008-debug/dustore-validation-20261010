@@ -79,6 +79,16 @@ public final class BehaviorTests {
         check("the median ignores idle seconds and needs enough of them", ExScale.median(new int[] { 0, 30, 0, 31, 29, 30, 30, 28, 30, 32, 30, 33, 0 }, 13) == 30
                 && ExScale.median(new int[] { 20, 21, 22 }, 3) == 0);
         check("an unknown setting reads as automatic", ExScale.normalize("?").equals(ExScale.AUTO) && ExScale.normalize(null).equals(ExScale.AUTO));
+        check("smart ULTRA: still slow one step down goes another step down",
+                ExScale.learnLevel(ExScale.LOWER, 1, 17, 300, 5000) == ExScale.LOWEST && ExScale.level(true, ExScale.AUTO, ExScale.LOWEST) == 2);
+        check("smart ULTRA: a step lower is 16:9 with 64 % of the pixels", ExScale.size(false, 2)[0] * 9 == ExScale.size(false, 2)[1] * 16
+                && ExScale.size(true, 2)[0] * 9 == ExScale.size(true, 2)[1] * 16
+                && Math.abs(ExScale.size(false, 2)[0] * ExScale.size(false, 2)[1] / (double) (640 * 360) - 0.64) < 0.001);
+        check("smart ULTRA: frames to spare even with more pixels give the bigger size back",
+                ExScale.learnLevel(ExScale.LOWER, 1, 60, 300, 18000) == ExScale.UNDECIDED && ExScale.learnLevel(ExScale.LOWEST, 2, 59, 300, 18000) == ExScale.LOWER);
+        check("smart ULTRA: in between, the size holds", ExScale.learnLevel(ExScale.LOWER, 1, 45, 300, 13000) == ExScale.LOWER
+                && ExScale.learnLevel(ExScale.LOWEST, 2, 40, 300, 12000) == ExScale.LOWEST);
+        check("smart ULTRA: a game the smallest size broke is left alone", ExScale.learnLevel(ExScale.LOWEST, 2, 0, 10, 0) == ExScale.KEEP);
 
         check("a season recolours the action and leaves unknown roles alone",
                 "#FF9A3D".equals(Season.color(Season.HALLOWEEN, "ACTION")) && "#FFD36B".equals(Season.color(Season.NEW_YEAR, "ACTION"))

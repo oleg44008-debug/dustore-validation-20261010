@@ -84,6 +84,7 @@ enum Preferences {
     static let haptics = "dustore.prime.haptics"
     static let compactCards = "dustore.prime.compact-cards"
     static let seasonal = "dustore.seasonal-looks"
+    static let ultra = "dustore.prime.ultra"
 }
 
 enum MotionPreference: String, CaseIterable, Identifiable {

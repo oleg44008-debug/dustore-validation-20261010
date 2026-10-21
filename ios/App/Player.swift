@@ -10,6 +10,9 @@ final class PlayerSession: ObservableObject {
     @Published var error: String?
     weak var webView: WKWebView?
     private var closed = false
+    /// Smart ULTRA: the step this session plays at (nil without ULTRA) and the frames it drew.
+    var ultraStep: Int?
+    private var framesPerSecond: [Double] = []
     init(game: Game) { self.game = game }
     func attach(_ view: WKWebView) {
         guard !closed else { return }
@@ -34,6 +37,10 @@ final class PlayerSession: ObservableObject {
         if let value = body as? [String: Any], value["type"] as? String == "progress", let fraction = value["fraction"] as? Double {
             self.fraction = min(1, max(0, fraction)); return
         }
+        if let value = body as? [String: Any], value["type"] as? String == "fps", let seconds = value["values"] as? [Double] {
+            if framesPerSecond.count < 7200 { framesPerSecond.append(contentsOf: seconds) }
+            return
+        }
         let text = String(describing: body)
         SelfTest.gameReported(text)
         if text == "started" { ready = true; fraction = nil }
@@ -48,6 +55,12 @@ final class PlayerSession: ObservableObject {
     func close() {
         guard !closed else { return }
         closed = true
+        // The first seconds are loading screens; what is left decides the next session's step.
+        if let step = ultraStep {
+            let played = Array(framesPerSecond.dropFirst(15))
+            let learnt = UltraWeb.learn(UltraWeb.note(for: game.id), playedAt: step, medianFps: UltraWeb.median(played), samples: played.count)
+            UltraWeb.remember(learnt, for: game.id)
+        }
         input.close()
         webView?.setAllMediaPlaybackSuspended(true) { }
         webView?.stopLoading(); webView = nil
