@@ -203,7 +203,10 @@ struct LibraryScreen: View {
         }
     }
     var body: some View {
-        GeometryReader { geometry in
+        // The shown list is worked out once per update: filtering and sorting the whole library
+        // four times over, on every keystroke in the search field, was the costliest part of it.
+        let games = self.games
+        return GeometryReader { geometry in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 22) {
                     BrandHeader(title: "Ваши игры", subtitle: library.games.isEmpty ? "Коллекция, которая всегда под рукой" : "\(library.games.filter(\.playable).count) готовы к запуску · \(library.games.count) в коллекции").primeArrival()
