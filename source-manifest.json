@@ -4,8 +4,8 @@
   "freezes": {
     "ios": {
       "owner": "foundation",
-      "milestone": "Smart ULTRA for web games, 2026-10-21",
-      "snapshottedAtUtc": "2026-10-21T14:16:34.602588+00:00"
+      "milestone": "iPhone library: the shown games are worked out once per update",
+      "snapshottedAtUtc": "2026-10-22T12:10:14.253248+00:00"
     },
     "mac": {
       "owner": "mac_design",
@@ -163,8 +163,8 @@
       "path": "ios/App/Views.swift",
       "source": "DustoreIOS/App/Views.swift",
       "platform": "ios",
-      "bytes": 39530,
-      "sha256": "c135214c6fb10570afb010faa8760f8f63744fecb8e04003c418b65c2d513876"
+      "bytes": 39763,
+      "sha256": "3ed9460c57e190783d78a64b7a20a99dbe420eab671fe2f0451bab7e7d246407"
     },
     {
       "path": "ios/App/WebViews.swift",
